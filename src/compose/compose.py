@@ -766,6 +766,7 @@ def compose_frame(i):
             k = clamp((t - ip["in"] + 0.1) / 0.3) * (1 - clamp((t - ip["out"]) / 0.25))
             plate = gblur(plate, 3 * k) * (1 - 0.3 * k)
     img = Image.fromarray(np.clip(plate, 0, 255).astype(np.uint8)).resize((W, H), Image.LANCZOS)
+    img = img.filter(ImageFilter.UnsharpMask(radius=2, percent=70, threshold=2))  # restore crispness after upscale
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     rain = OV.get("rain") or {k: 0.0 for k in OV.get("rain_shots", [])}
     if sid in rain and t >= rain[sid]:
