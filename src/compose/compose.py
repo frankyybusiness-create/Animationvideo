@@ -821,7 +821,8 @@ def main():
     end = a.end if a.end is not None else total
     n0, n1 = round(a.start * FPS), round(end * FPS)
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
-    audio = os.path.join(ROOT, TL["audio"])
+    mix = TL.get("audio_mix")
+    audio = os.path.join(ROOT, mix if mix and os.path.exists(os.path.join(ROOT, mix)) else TL["audio"])
     cmd = ["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{fw}x{fh}", "-r", str(FPS),
            "-i", "-", "-ss", f"{a.start:.3f}", "-i", audio,
            "-map", "0:v", "-map", "1:a", "-af", "apad", "-t", f"{(n1 - n0) / FPS:.3f}",

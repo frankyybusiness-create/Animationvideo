@@ -112,5 +112,6 @@
    "step": 2,
    "desc": "Closing: finished home, Linda waves, CTA"
   }
- ]
+ ],
+ "audio_mix": "projects/eastern_counties/assets/soundtrack/mix.wav"
 }
