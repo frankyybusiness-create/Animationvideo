@@ -1,0 +1,46 @@
+{
+  "_note": "All times are seconds on the voiceover timeline (word times from config/voiceover_words.json). Caption words: [text, appear_time, highlight]. '\\n' forces a line break.",
+  "captions": [
+    {"out": 3.95,  "words": [["A", 0.70, false], ["compromised", 0.82, true], ["roof?", 1.24, false]]},
+    {"out": 6.95,  "words": [["Don’t", 4.58, false], ["risk", 4.82, true], ["your", 5.78, false], ["home.", 6.10, false]]},
+    {"out": 9.40,  "words": [["Across", 7.24, false], ["the", 7.48, false], ["region.", 7.68, true]]},
+    {"out": 14.12, "words": [["Built", 11.16, false], ["on", 12.58, false], ["trust.", 13.48, true]]},
+    {"out": 17.38, "words": [["Elite", 15.70, false], ["craftsmanship.", 16.48, true]]},
+    {"out": 19.52, "words": [["Zero", 17.48, false], ["cut", 17.88, false], ["corners.", 18.16, true]]},
+    {"out": 25.05, "words": [["Leaks.", 20.84, false], ["Repairs.", 22.66, false], ["\n", 23.9, false], ["New", 23.94, true], ["roofs.", 24.16, true]]},
+    {"out": 27.62, "words": [["Our", 25.36, false], ["local", 26.08, true], ["team.", 26.32, false]]},
+    {"out": 31.42, "words": [["Precision.", 27.76, false], ["Care.", 28.38, true], ["\n", 29.8, false], ["Peace", 29.86, true], ["of", 29.98, true], ["mind.", 30.06, true]]},
+    {"out": 33.58, "words": [["Stop", 31.82, false], ["gambling.", 31.94, true]]},
+    {"out": 99.0,  "words": [["Secure", 33.72, false], ["your", 34.06, false], ["\n", 34.2, false], ["free", 34.28, true], ["quote", 35.48, true], ["today.", 35.72, false]]}
+  ],
+  "name_card": {"in": 9.80, "out": 14.12, "line1": "SURESHIELD", "line2": "ROOFING LIMITED"},
+  "benefit_cards": {
+    "out": 19.52,
+    "cards": [
+      {"in": 14.64, "title": "Transparent pricing", "sub": "Clear and upfront"},
+      {"in": 16.48, "title": "Quality craftsmanship", "sub": "Elite roofing standards"},
+      {"in": 18.86, "title": "No hidden fees", "sub": "Zero cut corners"}
+    ]
+  },
+  "inspection_panel": {
+    "in": 19.78, "out": 21.70,
+    "header": "ROOF INSPECTION", "pill": "URGENT",
+    "image": "renders/roofdetail/0001.png",
+    "circles": [[0.24, 0.52, 0.17, 20.30], [0.64, 0.56, 0.15, 20.62]],
+    "badge": {"in": 20.84, "text": "Urgent leak call-out"}
+  },
+  "cta": {
+    "name_in": 32.30, "button_in": 34.28, "label_in": 34.62,
+    "name": "SURESHIELD ROOFING LIMITED",
+    "button": "Get your free quote",
+    "label": "Free, no-obligation quote"
+  },
+  "sparkles": {"in": 31.60},
+  "rain_shots": ["s1", "s2a", "s2b", "s3", "s4", "s5a", "s5b", "s5c", "s6a", "s7"],
+  "transitions": {
+    "default": "whip",
+    "s4>s5a": "defocus",
+    "s5a>s5b": "defocus",
+    "s6a>s6b": "defocus"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "audio": "assets/voiceover.mp3",
+  "audio_duration": 36.21,
+  "tail_hold": 1.0,
+  "total_duration": 37.2,
+  "shots": [
+    {"id": "s1",  "start": 0.00,  "end": 4.16,  "scene": 1, "desc": "Damaged roof, rain, crane down to worried homeowner Arthur"},
+    {"id": "s2a", "start": 4.16,  "end": 7.10,  "scene": 2, "desc": "Careless fictional contractor on roof, Arthur concerned"},
+    {"id": "s2b", "start": 7.10,  "end": 9.55,  "scene": 2, "desc": "Wide street of British terraced homes - across the region"},
+    {"id": "s3",  "start": 9.55,  "end": 14.30, "scene": 3, "desc": "Sureshield team arrives, inspects home; company name card"},
+    {"id": "s4",  "start": 14.30, "end": 19.70, "scene": 4, "desc": "Close-up careful tile work + stacked benefit cards"},
+    {"id": "s5a", "start": 19.70, "end": 21.80, "scene": 5, "desc": "Roof inspection panel: urgent leak call-out"},
+    {"id": "s5b", "start": 21.80, "end": 23.50, "scene": 5, "desc": "Roofer repairing damaged section"},
+    {"id": "s5c", "start": 23.50, "end": 25.20, "scene": 5, "desc": "New tiles being installed"},
+    {"id": "s6a", "start": 25.20, "end": 29.10, "scene": 6, "desc": "Team finishing, finished house reveal"},
+    {"id": "s6b", "start": 29.10, "end": 31.60, "scene": 6, "desc": "Arthur relaxed indoors as the weather turns"},
+    {"id": "s7",  "start": 31.60, "end": 37.20, "scene": 7, "desc": "Closing composition + CTA"}
+  ]
+}
