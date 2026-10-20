@@ -729,6 +729,29 @@ def shot_at(t):
     return next((s for s in SHOTS if s["start"] <= t < s["end"]), SHOTS[-1])
 
 
+SPLIT = False
+
+
+def label_bar(text, w):
+    bar = Image.new("RGB", (w, 64), (12, 14, 20))
+    ImageDraw.Draw(bar).text((w / 2, 44), text, font=font("Inter-Bold", 30), fill=(255, 255, 255), anchor="ms")
+    return bar
+
+
+def split_frame(i):
+    """Editing breakdown: raw 3D render (left) vs finished edit (right)."""
+    t = i / FPS
+    raw = Image.fromarray(np.clip(base_image(t), 0, 255).astype(np.uint8)).resize((540, 960), Image.LANCZOS)
+    fin = compose_frame(i).resize((540, 960), Image.LANCZOS)
+    out = Image.new("RGB", (W, 1024), (12, 14, 20))
+    out.paste(label_bar("RAW 3D RENDER", 540), (0, 0))
+    out.paste(label_bar("FINAL EDIT", 540), (540, 0))
+    out.paste(raw, (0, 64))
+    out.paste(fin, (540, 64))
+    ImageDraw.Draw(out).rectangle([538, 0, 541, 1024], fill=(247, 106, 50))
+    return out
+
+
 def compose_frame(i):
     t = i / FPS
     plate = base_image(t)
@@ -773,14 +796,19 @@ def main():
     ap.add_argument("--out", default=os.path.join(ROOT, "output", "sureshield_roofing_tiktok.mp4"))
     ap.add_argument("--start", type=float, default=0.0)
     ap.add_argument("--project", default="")
+    ap.add_argument("--split", action="store_true", help="side-by-side raw render vs final edit")
     ap.add_argument("--end", type=float, default=None)
     a = ap.parse_args()
     PLACEHOLDER = a.placeholder
+    global SPLIT
+    SPLIT = a.split
+    fw, fh = (W, 1024) if SPLIT else (W, H)
+    render = split_frame if SPLIT else compose_frame
     if a.stills:
         os.makedirs(a.stills_dir, exist_ok=True)
         for ts in a.stills.split(","):
             t = float(ts)
-            compose_frame(round(t * FPS)).save(os.path.join(a.stills_dir, f"t{t:06.2f}.png"))
+            render(round(t * FPS)).save(os.path.join(a.stills_dir, f"t{t:06.2f}.png"))
             print("still", t, flush=True)
         return
     total = TL["total_duration"]
@@ -788,14 +816,14 @@ def main():
     n0, n1 = round(a.start * FPS), round(end * FPS)
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     audio = os.path.join(ROOT, TL["audio"])
-    cmd = ["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
+    cmd = ["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{fw}x{fh}", "-r", str(FPS),
            "-i", "-", "-ss", f"{a.start:.3f}", "-i", audio,
            "-map", "0:v", "-map", "1:a", "-af", "apad", "-t", f"{(n1 - n0) / FPS:.3f}",
            "-c:v", "libx264", "-preset", "slow", "-crf", "17", "-pix_fmt", "yuv420p", "-profile:v", "high",
            "-r", str(FPS), "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart", a.out]
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
     for i in range(n0, n1):
-        proc.stdin.write(compose_frame(i).tobytes())
+        proc.stdin.write(render(i).tobytes())
         if i % 30 == 0:
             print(f"frame {i}/{n1}", flush=True)
     proc.stdin.close()
