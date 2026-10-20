@@ -496,7 +496,7 @@ class Cards:
                 spr = self.sprite(("tag", ci), lambda: tag_sprite(c["text"], c["color"]))
                 y = CARD_Y if ci != 0 else CARD_Y
                 if c["text"] == "BUILT ON TRUST":
-                    y = CARD_Y + 300
+                    y = CARD_Y + 395
                 if c["text"].startswith("TRANSFORM"):
                     y = CARD_Y
                 self.put(img, spr, CAP_X, y, self.entrance(t, c["start"]) * out, t, ci)

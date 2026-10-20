@@ -34,7 +34,7 @@ Python module (`pip install bpy`) in a virtualenv. Inter fonts must be in
 ```bash
 python3 -m venv ~/venv && ~/venv/bin/pip install bpy numpy pillow
 python3 src/make_timeline.py            # only if captions/shots/cards change
-./build/render_all.sh                   # 3D plates (~9 s/frame on 4 CPU cores, ~2.7 h)
+SAMPLES=5 ./build/render_all.sh         # 3D plates (~7 s/frame on 4 CPU cores, ~2 h)
 python3 src/make_audio.py               # build/mix.wav
 python3 src/composite.py                # build/video_noaudio.mp4
 ffmpeg -i build/video_noaudio.mp4 -i build/mix.wav -map 0:v -map 1:a -c:v copy \
