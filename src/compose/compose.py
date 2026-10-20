@@ -25,8 +25,12 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-TL = json.load(open(os.path.join(ROOT, "config", "timeline.json")))
-OV = json.load(open(os.path.join(ROOT, "config", "overlays.json")))
+# --project projects/<name> selects that project's config (default: ./config)
+PROJECT = sys.argv[sys.argv.index("--project") + 1] if "--project" in sys.argv else ""
+CONF = os.path.join(ROOT, PROJECT, "config") if PROJECT else os.path.join(ROOT, "config")
+TL = json.load(open(os.path.join(CONF, "timeline.json")))
+OV = json.load(open(os.path.join(CONF, "overlays.json")))
+RENDERS = os.path.join(ROOT, TL.get("renders", "renders"))
 FPS = TL["fps"]
 W, H = TL["width"], TL["height"]
 HANDLE = 6
@@ -87,7 +91,7 @@ PLACEHOLDER = False
 
 @functools.lru_cache(maxsize=48)
 def load_render(shot_id, f):
-    d = os.path.join(ROOT, "renders", shot_id)
+    d = os.path.join(RENDERS, shot_id)
     p = os.path.join(d, f"{f:04d}.png")
     if os.path.exists(p):
         return np.asarray(Image.open(p).convert("RGB"), dtype=np.float32)
@@ -398,30 +402,48 @@ def entrance(t, t_in, dur=0.38):
     return clamp(p), ease_out(p), ease_out_back(p, 1.3)
 
 
-def draw_benefit_cards(layer, t):
-    bc = OV["benefit_cards"]
-    out_k = 1 - ease_out((t - bc["out"]) / 0.22)
-    if out_k <= 0:
-        return
-    for i, (c, im) in enumerate(zip(bc["cards"], cards_imgs())):
-        p, e, eb = entrance(t, c["in"])
-        if p <= 0:
-            continue
-        hover = 5 * math.sin(2 * math.pi * 0.42 * t + i * 1.9)
-        cy = CARD_Y[i] + lerp(70, 0, eb) + hover
-        place(layer, im, W / 2, cy, scale=lerp(0.94, 1.0, e), alpha=e * out_k, blur=lerp(12, 0, e) + (1 - out_k) * 8,
-              rot=CARD_ROT[i] + lerp(3 * (1 if i % 2 else -1), 0, e), darken=lerp(0.45, 0, e),
-              shadow=(18, 0.55))
+def card_stacks():
+    if "card_stacks" in OV:
+        return OV["card_stacks"]
+    return [OV["benefit_cards"]] if "benefit_cards" in OV else []
 
 
 @functools.lru_cache(maxsize=None)
-def name_card_img():
-    nc = OV["name_card"]
+def stack_imgs(k):
+    return [benefit_card(i, c["title"], c["sub"]) for i, c in enumerate(card_stacks()[k]["cards"])]
+
+
+def draw_benefit_cards(layer, t):
+    for k, bc in enumerate(card_stacks()):
+        out_k = 1 - ease_out((t - bc["out"]) / 0.22)
+        if out_k <= 0:
+            continue
+        y0 = bc.get("y0", CARD_Y[0])
+        for i, (c, im) in enumerate(zip(bc["cards"], stack_imgs(k))):
+            p, e, eb = entrance(t, c["in"])
+            if p <= 0:
+                continue
+            hover = 5 * math.sin(2 * math.pi * 0.42 * t + i * 1.9)
+            cy = y0 + 172 * i + lerp(70, 0, eb) + hover
+            place(layer, im, W / 2, cy, scale=lerp(0.94, 1.0, e), alpha=e * out_k,
+                  blur=lerp(12, 0, e) + (1 - out_k) * 8, rot=CARD_ROT[i % 3] + lerp(3 * (1 if i % 2 else -1), 0, e),
+                  darken=lerp(0.45, 0, e), shadow=(18, 0.55))
+
+
+def name_cards():
+    return OV.get("name_cards") or ([OV["name_card"]] if "name_card" in OV else [])
+
+
+@functools.lru_cache(maxsize=None)
+def name_card_img(k=0):
+    nc = name_cards()[k]
     w, h = 900, 214
     card = rounded_card(w, h, 30, CREAM, strip=ORANGE, strip_w=16)
     d = ImageDraw.Draw(card)
     f1 = font("Inter-ExtraBold", 96)
     f2 = font("Inter-Bold", 40)
+    while tracked_len(nc["line1"], f1, 2) > w - 80:
+        f1 = font("Inter-ExtraBold", f1.size - 4)
     l1 = tracked_len(nc["line1"], f1, 2)
     l2 = tracked_len(nc["line2"], f2, 9)
     text_tracked(d, ((w - l1) / 2 + 8, 118), nc["line1"], f1, INK, 2)
@@ -430,13 +452,17 @@ def name_card_img():
 
 
 def draw_name_card(layer, t):
-    nc = OV["name_card"]
+    for k, nc in enumerate(name_cards()):
+        _draw_name_card(layer, t, k, nc)
+
+
+def _draw_name_card(layer, t, k, nc):
     p, e, eb = entrance(t, nc["in"], 0.45)
     out_k = 1 - ease_out((t - nc["out"]) / 0.22)
     if p <= 0 or out_k <= 0:
         return
     hover = 5 * math.sin(2 * math.pi * 0.35 * t)
-    place(layer, name_card_img(), W / 2, 470 + lerp(80, 0, eb) + hover, scale=lerp(0.9, 1, e), alpha=e * out_k,
+    place(layer, name_card_img(k), W / 2, 470 + lerp(80, 0, eb) + hover, scale=lerp(0.9, 1, e), alpha=e * out_k,
           blur=lerp(14, 0, e) + (1 - out_k) * 8, rot=lerp(-3, -0.6, e), darken=lerp(0.4, 0, e), shadow=(20, 0.55))
 
 
@@ -447,9 +473,15 @@ def draw_name_card(layer, t):
 PANEL = dict(w=920, h=900, img_w=876, img_h=600, img_y=104)
 
 
+def panels():
+    if "panels" in OV:
+        return OV["panels"]
+    return [dict(OV["inspection_panel"], type="report")] if "inspection_panel" in OV else []
+
+
 @functools.lru_cache(maxsize=None)
-def panel_base():
-    ip = OV["inspection_panel"]
+def panel_header(k):
+    ip = panels()[k]
     w, h = PANEL["w"], PANEL["h"]
     card = rounded_card(w, h, 40, CREAM)
     d = ImageDraw.Draw(card)
@@ -459,6 +491,16 @@ def panel_base():
     pill = rounded_card(int(pw), 54, 27, ORANGE)
     ImageDraw.Draw(pill).text((pw / 2, 38), ip["pill"], font=pf, fill=(255, 255, 255), anchor="ms")
     card.alpha_composite(pill, (int(w - 26 - pw), 26))
+    return card
+
+
+@functools.lru_cache(maxsize=None)
+def panel_base(k=0):
+    ip = panels()[k]
+    if ip.get("type") == "booking":
+        return panel_header(k)
+    card = panel_header(k).copy()
+    w = PANEL["w"]
     src = Image.open(os.path.join(ROOT, ip["image"])).convert("RGB")
     iw, ih = PANEL["img_w"], PANEL["img_h"]
     sc = max(iw / src.width, ih / src.height)
@@ -481,16 +523,49 @@ def badge_img(text):
     return b
 
 
+SLOT_ORDER = [5, 0, 9, 2, 7, 11, 3, 8, 1, 10]  # slots that fill; 4 and 6 stay open
+
+
+def draw_booking_slots(card, ip, t):
+    d = ImageDraw.Draw(card)
+    cols, rows = 4, 3
+    x0, y0, gw, gh, gap = 40, 120, 840, 560, 22
+    sw, shh = (gw - gap * (cols - 1)) / cols, (gh - gap * (rows - 1)) / rows
+    t0, t1 = ip["fill_from"], ip["fill_to"]
+    for i in range(cols * rows):
+        r, c = divmod(i, cols)
+        X, Y = x0 + c * (sw + gap), y0 + r * (shh + gap)
+        k = 0.0
+        if i in SLOT_ORDER:
+            ti = t0 + (t1 - t0) * SLOT_ORDER.index(i) / len(SLOT_ORDER)
+            k = ease_out((t - ti) / 0.25)
+        col = tuple(int(lerp(a, b, k)) for a, b in zip((234, 227, 217), ORANGE))
+        sc = 1 + 0.08 * math.sin(math.pi * clamp(k))
+        cx, cy = X + sw / 2, Y + shh / 2
+        d.rounded_rectangle([cx - sw / 2 * sc, cy - shh / 2 * sc, cx + sw / 2 * sc, cy + shh / 2 * sc], 22, fill=col)
+        if k > 0.5:
+            ic = check_icon(64, ORANGE, bg=(255, 255, 255), stroke=10)
+            card.alpha_composite(ic, (int(cx - 32), int(cy - 32)))
+        else:
+            d.rounded_rectangle([cx - 34, cy - 6, cx + 34, cy + 6], 6, fill=(205, 196, 184))
+
+
 def draw_panel(layer, t):
-    ip = OV["inspection_panel"]
+    for k, ip in enumerate(panels()):
+        _draw_panel(layer, t, k, ip)
+
+
+def _draw_panel(layer, t, k, ip):
     p, e, eb = entrance(t, ip["in"], 0.45)
     out_k = 1 - ease_out((t - ip["out"]) / 0.2)
     if p <= 0 or out_k <= 0:
         return
-    card = panel_base().copy()
+    card = panel_base(k).copy()
+    if ip.get("type") == "booking":
+        draw_booking_slots(card, ip, t)
     d = ImageDraw.Draw(card)
     ix0 = (PANEL["w"] - PANEL["img_w"]) // 2
-    for cx, cy, r, t_c in ip["circles"]:
+    for cx, cy, r, t_c in ip.get("circles", []):
         k = ease_in_out((t - t_c) / 0.35)
         if k <= 0:
             continue
@@ -507,6 +582,35 @@ def draw_panel(layer, t):
     hover = 6 * math.sin(2 * math.pi * 0.4 * t)
     place(layer, card, W / 2, 960 + lerp(90, 0, eb) + hover, scale=lerp(0.93, 1, e), alpha=e * out_k,
           blur=lerp(16, 0, e) + (1 - out_k) * 10, rot=lerp(2.5, 0, e), shadow=(24, 0.6))
+
+
+# ---------------------------------------------------------------------------
+# location / status label pill
+# ---------------------------------------------------------------------------
+
+@functools.lru_cache(maxsize=None)
+def label_img(text):
+    f = font("Inter-Bold", 34)
+    tl = tracked_len(text, f, 4)
+    w, h = int(tl + 130), 84
+    im = rounded_card(w, h, 42, (17, 22, 33))
+    im.putalpha(im.getchannel("A").point(lambda v: int(v * 0.88)))
+    d = ImageDraw.Draw(im)
+    d.ellipse([34, 28, 62, 56], fill=ORANGE)
+    d.ellipse([43, 37, 53, 47], fill=(17, 22, 33))
+    text_tracked(d, (84, 54), text, f, (255, 255, 255), 4)
+    return im
+
+
+def draw_labels(layer, t):
+    for lb in OV.get("labels", []):
+        p, e, eb = entrance(t, lb["in"], 0.4)
+        out_k = 1 - ease_out((t - lb["out"]) / 0.2)
+        if p <= 0 or out_k <= 0:
+            continue
+        hover = 4 * math.sin(2 * math.pi * 0.4 * t)
+        place(layer, label_img(lb["text"]), W / 2, lb.get("y", 520) + lerp(40, 0, eb) + hover,
+              scale=lerp(0.9, 1, eb), alpha=e * out_k, blur=lerp(10, 0, e) + (1 - out_k) * 6, shadow=(16, 0.5))
 
 
 # ---------------------------------------------------------------------------
@@ -591,13 +695,14 @@ def compose_frame(i):
     t = i / FPS
     plate = base_image(t)
     sid = shot_at(t)["id"]
-    ip = OV["inspection_panel"]
-    if ip["in"] - 0.1 <= t <= ip["out"] + 0.25:
-        k = clamp((t - ip["in"] + 0.1) / 0.3) * (1 - clamp((t - ip["out"]) / 0.25))
-        plate = gblur(plate, 3 * k) * (1 - 0.3 * k)
+    for ip in panels():
+        if ip["in"] - 0.1 <= t <= ip["out"] + 0.25:
+            k = clamp((t - ip["in"] + 0.1) / 0.3) * (1 - clamp((t - ip["out"]) / 0.25))
+            plate = gblur(plate, 3 * k) * (1 - 0.3 * k)
     img = Image.fromarray(np.clip(plate, 0, 255).astype(np.uint8)).resize((W, H), Image.LANCZOS)
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    if sid in OV["rain_shots"]:
+    rain = OV.get("rain") or {k: 0.0 for k in OV.get("rain_shots", [])}
+    if sid in rain and t >= rain[sid]:
         draw_rain(layer, t)
     img = img.convert("RGBA")
     img.alpha_composite(layer)
@@ -608,6 +713,7 @@ def compose_frame(i):
     img = Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8)).convert("RGBA")
     ui = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     draw_name_card(ui, t)
+    draw_labels(ui, t)
     draw_benefit_cards(ui, t)
     draw_panel(ui, t)
     draw_cta(ui, t)
@@ -626,6 +732,7 @@ def main():
     ap.add_argument("--placeholder", action="store_true")
     ap.add_argument("--out", default=os.path.join(ROOT, "output", "sureshield_roofing_tiktok.mp4"))
     ap.add_argument("--start", type=float, default=0.0)
+    ap.add_argument("--project", default="")
     ap.add_argument("--end", type=float, default=None)
     a = ap.parse_args()
     PLACEHOLDER = a.placeholder

@@ -554,6 +554,30 @@ CHARACTERS = {
 }
 
 
+CHARACTERS.update({
+    # Eastern Counties Paving homeowner: original character, auburn bob with a
+    # fringe, cranberry knit jumper under a mustard quilted gilet, no glasses.
+    "linda": dict(
+        skin="#f3bb9c", head=(1.0, 0.88, 1.02), hat=None, hat_col=None,
+        hair="#8a3b1c", hair_style="bob", brows="#6e2c14", moustache=None, beard=None,
+        top="jumper", top_col="#a3263a", vest_gilet="#d39a2c", shirt=None, trousers="#2f3a52",
+        shoes="#e9e4dc", eye_iris="#3c6b4a", glasses=False, lips="#b2443f",
+    ),
+    "paver1": dict(
+        skin="#c98563", head=(1.0, 0.88, 1.0), hat="cap_front", hat_col="#22304f",
+        hair="#3a2a1e", hair_style="none", brows="#2d2018", moustache=None, beard="full",
+        beard_col="#4a3324", top="workwear", top_col="#2b2f36", vest="#ff8a1f", shirt=None,
+        trousers="#1c2233", shoes="#3b2a1d", eye_iris="#2a1a10", glasses=False, kneepads=True,
+    ),
+    "paver2": dict(
+        skin="#f0b48e", head=(0.98, 0.86, 1.04), hat=None, hat_col=None,
+        hair="#e2b04a", hair_style="crop", brows="#c0902e", moustache=None, beard=None,
+        top="workwear", top_col="#2b2f36", vest="#ff8a1f", shirt=None,
+        trousers="#1c2233", shoes="#3b2a1d", eye_iris="#2c4a5e", glasses=False, kneepads=True,
+    ),
+})
+
+
 class Character:
     """A simple hierarchical toy rig built from rounded primitives."""
 
@@ -567,14 +591,14 @@ class Character:
         iris = mat_basic(pre + "iris", s["eye_iris"], rough=0.1, coat=1.0)
         black = mat_basic("pupil_black", "#050505", rough=0.1, coat=1.0)
         hl = mat_emission("eye_hl", "#ffffff", 6.0)
-        dark = mat_basic("mouth_dark", "#3a1410", rough=0.5)
+        dark = mat_basic(pre + "mouth", s.get("lips", "#3a1410"), rough=0.4)
 
         self.root = empty(pre + "root", loc, (0, 0, rot_z))
         self.hips = empty(pre + "hips", (0, 0, 0.62), parent=self.root)
         # torso -------------------------------------------------------------
         self.torso = empty(pre + "torso", (0, 0, 0.0), parent=self.hips)
         top = s["top"]
-        if top == "cardigan":
+        if top in ("cardigan", "jumper"):
             tm = mat_knit(pre + "top", s["top_col"], scale=24)
         elif top == "hoodie":
             tm = mat_fabric(pre + "top", s["top_col"], rough=0.9)
@@ -596,6 +620,14 @@ class Character:
             lace = mat_basic("lace", "#e8e4dc", rough=0.6)
             for x in (-0.08, 0.08):
                 cyl(pre + f"lace{x}", 0.012, 0.2, lace, (x, -0.29, 0.6), parent=self.torso, seg=8)
+        if s.get("vest_gilet"):
+            gm = mat_tweed(pre + "gilet", s["vest_gilet"], scale=40)
+            for x in (-0.25, 0.25):
+                rbox(pre + f"gil{x}", (0.36, 0.62, 0.74), 0.15, gm, (x, 0.0, 0.37), parent=self.torso)
+            for zz in (0.18, 0.36, 0.54):
+                rbox(pre + f"quilt{zz}", (0.9, 0.62, 0.025), 0.012, mat_basic(pre + "quilt", "#a87420", rough=0.7),
+                     (0, 0.0, zz), parent=self.torso)
+            rbox(pre + "collarJ", (0.34, 0.34, 0.1), 0.05, tm, (0, -0.02, 0.76), parent=self.torso)
         if s.get("vest"):
             vm = mat_basic(pre + "vest", s["vest"], rough=0.55, emit=s["vest"], emit_strength=0.15)
             refl = mat_basic("reflect", "#c9ccd2", rough=0.25, metal=0.6)
@@ -614,6 +646,9 @@ class Character:
             knee = empty(pre + "knee" + side, (0, 0, -0.3), parent=hip)
             rbox(pre + "shin" + side, (0.25, 0.27, 0.3), 0.11, trous, (0, 0, -0.12), parent=knee)
             rbox(pre + "shoe" + side, (0.28, 0.4, 0.14), 0.07, shoe, (0, -0.06, -0.3), parent=knee)
+            if s.get("kneepads"):
+                rbox(pre + "kpad" + side, (0.26, 0.08, 0.16), 0.04, mat_basic("kneepad", "#1a1a1a", rough=0.5),
+                     (0, -0.14, 0.0), parent=knee)
             self.leg[side] = hip
             self.knee[side] = knee
         # arms ---------------------------------------------------------------
@@ -690,6 +725,18 @@ class Character:
             rbox(pre + "stub", (hw * 0.96, hd_ * 0.6, 0.3), 0.14, st, (0, fy * 0.45 + 0.005, 0.13), parent=self.head)
         # hair
         hair = mat_knit(pre + "hair", s["hair"], scale=160, rough=0.95)
+        if s["hair_style"] == "bob":
+            rbox(pre + "bobTop", (hw * 1.1, hd_ * 1.1, 0.34), 0.16, hair, (0, 0.03, hh - 0.04), parent=self.head, seg=5)
+            for x in (hw / 2, -hw / 2):
+                rbox(pre + f"bobS{x}", (0.16, hd_ * 0.95, hh * 0.78), 0.07, hair, (x * 1.05, 0.06, hc + 0.05),
+                     parent=self.head)
+            rbox(pre + "bobB", (hw * 1.06, 0.16, hh * 0.8), 0.07, hair, (0, -fy * 1.04, hc + 0.06), parent=self.head)
+            rbox(pre + "fringe", (hw * 0.92, 0.12, 0.2), 0.06, hair, (0, fy - 0.02, hh - 0.14), rot=rad(8, 0, 0),
+                 parent=self.head)
+        elif s["hair_style"] == "crop":
+            rbox(pre + "crop", (hw * 1.03, hd_ * 1.03, 0.18), 0.08, hair, (0, 0.0, hh - 0.04), parent=self.head)
+            rbox(pre + "quiff", (hw * 0.5, 0.2, 0.12), 0.05, hair, (0.1, fy + 0.08, hh + 0.04), rot=rad(0, -8, 0),
+                 parent=self.head)
         if s["hair_style"] == "sides":
             for x in (hw / 2, -hw / 2):
                 rbox(pre + f"hairS{x}", (0.1, 0.5, 0.38), 0.05, hair, (x * 1.01, 0.12, hc + 0.18), parent=self.head)
@@ -710,6 +757,11 @@ class Character:
             dome = sphere(pre + "hhD", 0.56, hm, (0, 0.0, hh - 0.08), scale=(hw * 1.0, hd_ * 1.12, 0.62), parent=self.head)
             cyl(pre + "hhB", 0.6, 0.04, hm, (0, -0.05, hh - 0.1), parent=self.head).scale = (hw, hd_ * 1.25, 1)
             rbox(pre + "hhR", (0.1, hd_ * 1.0, 0.07), 0.035, hm, (0, 0, hh + 0.24), parent=self.head)
+        elif hat == "cap_front":
+            cm = mat_fabric(pre + "cap", s["hat_col"], rough=0.8)
+            sphere(pre + "capD", 0.53, cm, (0, 0.02, hh - 0.08), scale=(hw * 1.03, hd_ * 1.12, 0.55), parent=self.head)
+            rbox(pre + "capBr", (0.6, 0.4, 0.05), 0.024, cm, (0, fy - 0.16, hh - 0.08), rot=rad(10, 0, 0),
+                 parent=self.head)
         elif hat == "cap_back":
             cm = mat_fabric(pre + "cap", s["hat_col"], rough=0.8)
             sphere(pre + "capD", 0.53, cm, (0, 0.02, hh - 0.08), scale=(hw * 1.03, hd_ * 1.12, 0.55), parent=self.head)
@@ -1050,3 +1102,234 @@ def render_settings(res_pct=50, samples=24, frame_start=1, frame_end=1, out="//r
     scn.frame_start = frame_start
     scn.frame_end = frame_end
     scn.render.filepath = out
+
+
+# ----------------------------------------------------------------------------
+# paving
+# ----------------------------------------------------------------------------
+
+BLOCK_L, BLOCK_W, BLOCK_T = 0.34, 0.17, 0.08
+
+
+def mat_blocks(name, cols=("#9a4a33", "#6e3a2c", "#b5703f", "#4d4a4a"), rough=0.45, wet=True):
+    """Brindle block-paving mix: per-object random colour from a palette."""
+    if name in _MATS:
+        return _MATS[name]
+    m = mat_basic(name, cols[0], rough=rough, coat=0.35 if wet else 0.0)
+    nt = m.node_tree
+    p = _principled(m)
+    info = nt.nodes.new("ShaderNodeObjectInfo")
+    ramp = nt.nodes.new("ShaderNodeValToRGB")
+    ramp.color_ramp.interpolation = "CONSTANT"
+    els = ramp.color_ramp.elements
+    els[0].position = 0.0
+    els[0].color = hexc(cols[0])
+    els[1].position = 1.0 / len(cols)
+    els[1].color = hexc(cols[1])
+    for i, c in enumerate(cols[2:], start=2):
+        e = els.new(i / len(cols))
+        e.color = hexc(c)
+    nt.links.new(info.outputs["Random"], ramp.inputs["Fac"])
+    tc = nt.nodes.new("ShaderNodeTexCoord")
+    noise = nt.nodes.new("ShaderNodeTexNoise")
+    noise.inputs["Scale"].default_value = 40
+    nt.links.new(tc.outputs["Object"], noise.inputs["Vector"])
+    mix = nt.nodes.new("ShaderNodeMix")
+    mix.data_type = "RGBA"
+    mix.blend_type = "MULTIPLY"
+    mix.inputs["Factor"].default_value = 0.25
+    nt.links.new(ramp.outputs["Color"], mix.inputs["A"])
+    nt.links.new(noise.outputs["Color"], mix.inputs["B"])
+    nt.links.new(mix.outputs["Result"], p.inputs["Base Color"])
+    _bumped(m, noise, strength=0.25, dist=0.01)
+    return m
+
+
+def block_mesh(l=BLOCK_L, w=BLOCK_W, key="block"):
+    return rbox_mesh(l - 0.012, w - 0.012, BLOCK_T, 0.018, 2, key=key)
+
+
+def build_driveway(name, origin, width, depth, cols=None, damage=None, seed=1, border=True, worn=False,
+                   reveal=None):
+    """Running-bond block paving with a charcoal soldier-course border.
+
+    origin = front-left corner (x, y, z).  Blocks run along X.
+    damage: dict with 'centre' (x,y world), 'radius', 'sink', 'missing' (0..1), 'weeds' (int)
+    reveal: (f0, rate) -> blocks pop in row by row from the far edge (installation).
+    Returns dict(root, blocks=[...]).
+    """
+    rnd = random.Random(seed)
+    root = empty(name, origin)
+    m = mat_blocks(name + "_mat", cols or ("#9a4a33", "#6e3a2c", "#b5703f", "#4d4a4a"))
+    if worn:
+        m = mat_blocks(name + "_worn", ("#7d6a60", "#6b5d55", "#8d7a6c", "#5a5552"), rough=0.75, wet=False)
+    edge = mat_basic("kerb_charcoal", "#2f2f33", rough=0.5)
+    sand = mat_basic("sand_bed", "#8a7457", rough=0.95)
+    rbox(name + "_bed", (width, depth, 0.06), 0.01, sand, (width / 2, depth / 2, -0.04), parent=root)
+    me = block_mesh()
+    blocks = []
+    b = BLOCK_W if border else 0.0
+    rows = int((depth - 2 * b) / BLOCK_W)
+    cols_n = int((width - 2 * b) / BLOCK_L) + 2
+    for r in range(rows):
+        off = (BLOCK_L / 2) * (r % 2)
+        y = b + BLOCK_W * (r + 0.5)
+        for c in range(cols_n):
+            x = b + c * BLOCK_L - off + BLOCK_L / 2
+            if x - BLOCK_L / 2 < b - 0.01 or x + BLOCK_L / 2 > width - b + 0.01:
+                continue
+            ox, oy = origin[0] + x, origin[1] + y
+            loc = [x, y, BLOCK_T / 2]
+            rot = [0, 0, math.radians(rnd.uniform(-0.4, 0.4))]
+            if damage:
+                cx, cy = damage["centre"]
+                d = math.hypot(ox - cx, oy - cy) / damage["radius"]
+                if d < 1.0:
+                    k = (1 - d) ** 1.3
+                    if rnd.random() < damage.get("missing", 0) * k:
+                        continue
+                    loc[2] -= damage.get("sink", 0.07) * k * rnd.uniform(0.5, 1.2)
+                    rot[0] = math.radians(rnd.uniform(-9, 9) * k)
+                    rot[1] = math.radians(rnd.uniform(-9, 9) * k)
+                    rot[2] += math.radians(rnd.uniform(-6, 6) * k)
+            if damage and d < 0.85 and rnd.random() < damage.get("split", 0.0):
+                # cracked block: two halves with a dark gap
+                hm = rbox_mesh(BLOCK_L / 2 - 0.02, BLOCK_W - 0.012, BLOCK_T, 0.014, 2, key="halfblock")
+                for sgn in (-1, 1):
+                    hloc = (loc[0] + sgn * (BLOCK_L / 4 + 0.006), loc[1], loc[2] - (0.012 if sgn > 0 else 0))
+                    hrot = (rot[0] + math.radians(rnd.uniform(-5, 5)), rot[1] + math.radians(sgn * rnd.uniform(2, 7)),
+                            rot[2] + math.radians(rnd.uniform(-5, 5)))
+                    obj(f"{name}_h{r}_{c}_{sgn}", hm, m, hloc, hrot, parent=root)
+                continue
+            t = obj(f"{name}_b{r}_{c}", me, m, tuple(loc), tuple(rot), parent=root)
+            t["row"] = r
+            blocks.append(t)
+    if border:
+        sm = block_mesh(BLOCK_W, BLOCK_L, key="soldier")
+        for c in range(int(width / BLOCK_W)):
+            for yy in (BLOCK_L / 2 - 0.08, depth - BLOCK_L / 2 + 0.08):
+                obj(f"{name}_sx{c}_{yy:.1f}", sm, edge, (BLOCK_W * (c + 0.5), yy, BLOCK_T / 2), parent=root)
+    if damage and damage.get("weeds"):
+        weed = mat_basic("weed", "#3f6b2a", rough=0.7, sss=0.2)
+        cx, cy = damage["centre"]
+        for i in range(damage["weeds"]):
+            a = rnd.uniform(0, 6.28)
+            rr = rnd.uniform(0.1, 1.0) * damage["radius"]
+            g = empty(f"{name}_weed{i}", (cx - origin[0] + math.cos(a) * rr, cy - origin[1] + math.sin(a) * rr, 0.05),
+                      parent=root)
+            for j in range(4):
+                sphere(f"{name}_wl{i}_{j}", 0.045, weed, (rnd.uniform(-0.05, 0.05), rnd.uniform(-0.05, 0.05), 0.02 + j * 0.02),
+                       scale=(1, 0.4, 1.6), parent=g, seg=12).rotation_euler = (0, 0, rnd.uniform(0, 3))
+    if damage and damage.get("cracks"):
+        crack = mat_basic("crack", "#0d0b0a", rough=0.9)
+        cx, cy = damage["centre"]
+        for i in range(damage["cracks"]):
+            a = rnd.uniform(0, 6.28)
+            L = rnd.uniform(0.4, 1.1)
+            rbox(f"{name}_cr{i}", (L, 0.025, 0.02), 0.008, crack,
+                 (cx - origin[0] + math.cos(a) * 0.3, cy - origin[1] + math.sin(a) * 0.3, BLOCK_T + 0.003),
+                 rot=(0, 0, a + rnd.uniform(-0.5, 0.5)), parent=root)
+    return dict(root=root, blocks=blocks, rows=rows)
+
+
+def build_patio(name, origin, width, depth, seed=2, cols=("#c8b494", "#b9a283", "#d4c2a2", "#a99377")):
+    rnd = random.Random(seed)
+    root = empty(name, origin)
+    m = mat_blocks(name + "_mat", cols, rough=0.55, wet=False)
+    me = rbox_mesh(0.96, 0.62, 0.07, 0.025, 2, key="slab")
+    slabs = []
+    rows = int(depth / 0.66)
+    for r in range(rows):
+        off = 0.33 * (r % 2)
+        for c in range(int(width / 1.0) + 2):
+            x = c * 1.0 - off + 0.5
+            if x - 0.5 < -0.01 or x + 0.5 > width + 0.01:
+                continue
+            t = obj(f"{name}_s{r}_{c}", me, m, (x, r * 0.66 + 0.33, 0.035),
+                    (0, 0, math.radians(rnd.uniform(-0.3, 0.3))), parent=root)
+            t["row"] = r
+            slabs.append(t)
+    return dict(root=root, slabs=slabs)
+
+
+def reveal_rows(items, f0, per_row=3, drop=0.8, dur=7, reverse=False):
+    """Animate pieces dropping into place row by row (installation beat)."""
+    rows = sorted({int(o["row"]) for o in items})
+    if reverse:
+        rows = rows[::-1]
+    order = {r: i for i, r in enumerate(rows)}
+    for o in items:
+        f_land = f0 + order[int(o["row"])] * per_row + (hash(o.name) % 3)
+        base = o.location.copy()
+        o.keyframe_insert("location", frame=f_land)
+        o.keyframe_insert("scale", frame=f_land)
+        o.location.z = base.z + drop
+        o.scale = (0.001, 0.001, 0.001)
+        o.keyframe_insert("location", frame=f_land - dur)
+        o.keyframe_insert("scale", frame=f_land - dur)
+        o.location = base
+        o.scale = (1, 1, 1)
+
+
+def mallet(name, parent=None, loc=(0, 0, 0), rot=(0, 0, 0)):
+    wood = mat_basic("wood", "#a8743f", rough=0.5)
+    rub = mat_basic("rubber", "#1c1c1e", rough=0.6)
+    root = empty(name, loc, rot, parent=parent)
+    rbox(name + "_h", (0.05, 0.05, 0.42), 0.02, wood, (0, 0, -0.16), parent=root)
+    cyl(name + "_hd", 0.07, 0.22, rub, (0, 0, 0.06), rad(0, 90, 0), parent=root)
+    return root
+
+
+def wheelbarrow(name, loc, rot_z=0.0):
+    green = mat_basic("barrow", "#2e7d4f", rough=0.35, coat=0.4)
+    steel = mat_basic("steel", "#8b9198", rough=0.25, metal=1.0)
+    tyre = mat_basic("tyre", "#151515", rough=0.7)
+    sandm = mat_basic("sand_bed", "#8a7457", rough=0.95)
+    root = empty(name, loc, (0, 0, rot_z))
+    rbox(name + "_tub", (0.8, 1.1, 0.45), 0.15, green, (0, 0, 0.6), parent=root)
+    rbox(name + "_sand", (0.68, 0.95, 0.1), 0.08, sandm, (0, 0, 0.8), parent=root)
+    cyl(name + "_wh", 0.22, 0.12, tyre, (0, -0.75, 0.22), rad(0, 90, 0), parent=root)
+    for x in (-0.3, 0.3):
+        cyl(name + f"_hd{x}", 0.03, 1.4, steel, (x, 0.3, 0.55), rad(80, 0, 0), parent=root)
+        cyl(name + f"_lg{x}", 0.03, 0.4, steel, (x, 0.35, 0.2), parent=root)
+    return root
+
+
+def block_pallet(name, loc, cols=None):
+    wood = mat_basic("pallet", "#a07a4a", rough=0.8)
+    m = mat_blocks("pallet_blocks", cols or ("#9a4a33", "#6e3a2c", "#b5703f", "#4d4a4a"))
+    wrap = mat_basic("wrap", "#e8eef5", rough=0.15, coat=0.6)
+    root = empty(name, loc)
+    rbox(name + "_p", (1.2, 1.0, 0.14), 0.02, wood, (0, 0, 0.07), parent=root)
+    me = block_mesh()
+    for z in range(5):
+        for r in range(5):
+            for c in range(3):
+                obj(f"{name}_b{z}{r}{c}", me, m, (-0.36 + c * 0.35, -0.36 + r * 0.18, 0.18 + z * 0.085), parent=root)
+    return root
+
+
+def traffic_cone(name, loc):
+    o = mat_basic("cone", "#ff6a1a", rough=0.4, coat=0.4)
+    w = mat_basic("cone_w", "#f2f2f2", rough=0.3)
+    root = empty(name, loc)
+    rbox(name + "_b", (0.4, 0.4, 0.05), 0.02, o, (0, 0, 0.025), parent=root)
+    cyl(name + "_c", 0.15, 0.6, o, (0, 0, 0.34), r2=0.03, parent=root)
+    cyl(name + "_s", 0.105, 0.1, w, (0, 0, 0.36), r2=0.08, parent=root)
+    return root
+
+
+def toy_car(name, loc, rot_z=0.0, col="#2b5a8a"):
+    body = mat_basic("car_" + col, col, rough=0.2, coat=1.0)
+    glass = mat_basic("car_glass", "#141b26", rough=0.05, coat=1.0)
+    tyre = mat_basic("tyre", "#151515", rough=0.7)
+    lamp = mat_emission("car_lamp", "#fff3d6", 3)
+    root = empty(name, loc, (0, 0, rot_z))
+    rbox(name + "_b", (1.7, 3.6, 0.8), 0.3, body, (0, 0, 0.65), parent=root)
+    rbox(name + "_c", (1.5, 1.9, 0.7), 0.3, glass, (0, 0.25, 1.25), parent=root)
+    for x in (-0.8, 0.8):
+        for y in (-1.15, 1.15):
+            cyl(name + f"_w{x}{y}", 0.33, 0.25, tyre, (x, y, 0.33), rad(0, 90, 0), parent=root)
+    for x in (-0.55, 0.55):
+        sphere(name + f"_l{x}", 0.12, lamp, (x, -1.8, 0.75), scale=(1.2, 0.4, 0.7), parent=root, seg=12)
+    return root
