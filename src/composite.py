@@ -589,7 +589,7 @@ def vignette():
     if _vig is None:
         yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
         r = np.sqrt(((xx - W / 2) / (W * 0.62)) ** 2 + ((yy - H * 0.52) / (H * 0.62)) ** 2)
-        _vig = np.clip(1.0 - 0.42 * np.clip(r - 0.45, 0, 1) ** 1.6, 0, 1)[..., None]
+        _vig = np.clip(1.0 - 0.3 * np.clip(r - 0.45, 0, 1) ** 1.6, 0, 1)[..., None]
     return _vig
 
 
@@ -637,13 +637,9 @@ def scene_layer(f):
     local = f - shot["frame_start"] + 1
     img = load_plate(shot, local).convert("RGBA")
     n = shot["name"]
-    if n in ("s1_exterior", "s2_worry"):
-        PARTS.draw_rain(img, f)
-    elif n == "s9_cta":
+    if n == "s9_cta":  # daytime scenes: no rain / night bokeh
         PARTS.draw_bokeh(img, f, 0.8)
         PARTS.draw_sparkles(img, f, t - shot["start"])
-    elif n not in ("s3_region",):
-        PARTS.draw_bokeh(img, f, 0.35)
     CARDS.draw(img, t)
     arr = np.asarray(img.convert("RGB")).astype(np.float32)
     arr = arr * vignette() + grain(f)

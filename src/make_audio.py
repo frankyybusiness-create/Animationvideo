@@ -172,8 +172,9 @@ def main():
     rain = fft_filter(rng.normal(0, 1, n), 1500, 9000)
     rain = rain / np.abs(rain).max() * np.interp(np.arange(n), [0, SR * 0.3, n - SR * 0.6, n],
                                                  [0, 1, 1, 0])
-    sfx[:n, 0] += rain * 0.05
-    sfx[:n, 1] += np.roll(rain, 400) * 0.05
+    RAIN = 0.0  # daytime version: no rain ambience
+    sfx[:n, 0] += rain * RAIN
+    sfx[:n, 1] += np.roll(rain, 400) * RAIN
 
     music = music_bed() * db(-27)
     mix = voice * VO_GAIN + music + sfx

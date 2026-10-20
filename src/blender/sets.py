@@ -86,6 +86,21 @@ def cam_move(cam, tgt, keys):
             cam.data.keyframe_insert("lens", frame=f)
 
 
+DAY = {"on": False}
+
+
+def lights_day(scn, overcast=False):
+    """Daylight: sky world + sun. Lamps/windows switch off via DAY flag."""
+    DAY["on"] = True
+    if overcast:
+        sun("sun", (math.radians(35), 0, math.radians(-30)), 1.2, (0.95, 0.97, 1.0))
+        bpy.data.lights["sun"].angle = math.radians(25)
+        scn.view_settings.exposure = -0.4
+    else:
+        sun("sun", (math.radians(40), 0, math.radians(-38)), 6.5, (1.0, 0.93, 0.8))
+        scn.view_settings.exposure = -1.15
+
+
 def lights_night(scn):
     scn.view_settings.exposure = -1.6
     area("key", (-4, -6, 4), (0, 0, 1.2), 260, (1.0, 0.72, 0.48), 3)
@@ -224,9 +239,11 @@ def slabs(name, x0, y0, x1, y1, size=0.6, seed=3, z=0.04):
 # House
 # --------------------------------------------------------------------------
 def window(name, w, h, parent, loc, lit=True, warm=1.3):
+    if DAY["on"]:
+        lit = False
     frame_m = mat("uPVC", (0.85, 0.85, 0.83), rough=0.35, coat=0.3)
     glass = (glow("WinLit", (1.0, 0.5, 0.18), warm) if lit else
-             mat("WinDark", (0.02, 0.025, 0.04), rough=0.05, coat=1.0))
+             mat("WinDark", (0.05, 0.07, 0.09), rough=0.03, coat=1.0))
     rbox(name + "_fr", (w + 0.12, 0.12, h + 0.12), frame_m, 0.15, 3, parent, loc)
     plane(name + "_gl", (w, h), glass, (loc[0], loc[1] - 0.065, loc[2]),
           (math.pi / 2, 0, 0), parent)
@@ -292,7 +309,10 @@ def house(name, x=0.0, lit=(True, True, True, False), door_col=(0.02, 0.06, 0.16
            root, (1.95, -0.13, 1.0))
     rbox(name + "_canopy", (1.6, 0.8, 0.12), mat("Canopy", (0.12, 0.12, 0.13), rough=0.4),
          0.2, 2, root, (1.6, -0.4, 2.45), (math.radians(-8), 0, 0))
-    if porch_light:
+    if porch_light and DAY["on"]:
+        sphere(name + "_lamp", 0.07, mat("LampOff", (0.85, 0.85, 0.8), rough=0.2, coat=0.5),
+               root, (2.35, -0.12, 2.1))
+    elif porch_light:
         sphere(name + "_lamp", 0.07, glow("Lamp", (1.0, 0.75, 0.4), 12), root,
                (2.35, -0.12, 2.1))
         point(name + "_lampL", (x + (2.35 * (-1 if mirror else 1)), -0.4, 2.1), 30,
@@ -330,6 +350,10 @@ def street_lamp(name, loc, energy=300):
     pole = mat("LampPole", (0.05, 0.06, 0.06), rough=0.4, metal=0.5)
     cylinder(name + "_pole", 0.07, 5.0, pole, None, (loc[0], loc[1], 2.5))
     rbox(name + "_arm", (0.15, 0.9, 0.12), pole, 0.3, 2, None, (loc[0], loc[1] + 0.4, 5.0))
+    if DAY["on"]:
+        sphere(name + "_bulb", 0.2, mat("LampOff", (0.85, 0.85, 0.8), rough=0.2, coat=0.5),
+               None, (loc[0], loc[1] + 0.75, 4.85), scale=(1, 1, 0.6))
+        return
     sphere(name + "_bulb", 0.2, glow("StreetLamp", (1.0, 0.65, 0.3), 30), None,
            (loc[0], loc[1] + 0.75, 4.85), scale=(1, 1, 0.6))
     point(name + "_L", (loc[0], loc[1] + 0.75, 4.6), energy, (1.0, 0.62, 0.3), 0.3)
@@ -541,6 +565,7 @@ def garden_set():
     stone = mat("StepStone", (0.42, 0.38, 0.32), rough=0.75, bump=0.3, bump_scale=20)
     rbox("step1", (2.4, 0.45, 0.16), stone, 0.08, 2, None, (0.3, -4.45, -0.08))
     plane("lawn", (30, 14), lawn_mat(), (0, -11.5, -0.175))
+    plane("gground", (40, 40), mat("Ground", (0.02, 0.025, 0.02), rough=0.9), (0, -5, -0.2))
     # raised brick planters with sleeper edging & plants
     for i, (x, w) in enumerate(((-4.2, 2.2), (4.3, 2.4))):
         rbox(f"bed{i}", (w, 3.6, 0.6), brick_mat(), 0.02, 1, None, (x, -2.2, 0.3))
@@ -585,11 +610,17 @@ def garden_set():
             t = i / n
             x = xa + (xb - xa) * t
             z = 2.6 - 0.6 * math.sin(math.pi * t)
-            sphere(f"bulb{line}_{i}", 0.04, glow("Festoon", (1.0, 0.7, 0.35), 15), None,
+            sphere(f"bulb{line}_{i}", 0.04,
+                   mat("LampOff", (0.85, 0.85, 0.8)) if DAY["on"] else
+                   glow("Festoon", (1.0, 0.7, 0.35), 15), None,
                    (x, y, z), segs=10, rings=6)
-        point(f"festoonL{line}", (0, y, 2.1), 60, (1.0, 0.68, 0.35), 0.5)
+        if not DAY["on"]:
+            point(f"festoonL{line}", (0, y, 2.1), 60, (1.0, 0.68, 0.35), 0.5)
     # outdoor wall lights
     for x in (-2.5, 2.5):
+        if DAY["on"]:
+            sphere(f"wl{x}", 0.06, mat("LampOff", (0.85, 0.85, 0.8)), None, (x, -0.1, 2.2))
+            continue
         sphere(f"wl{x}", 0.06, glow("Lamp", (1.0, 0.75, 0.4), 12), None, (x, -0.1, 2.2))
         point(f"wlL{x}", (x, -0.5, 2.2), 35, (1.0, 0.7, 0.4), 0.1)
 

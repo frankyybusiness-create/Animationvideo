@@ -64,7 +64,7 @@ I downloaded the reference from the GitHub release
 |---|---|
 | 3D toy characters, rounded-block heads | Original cast built procedurally in Blender (Cycles). **Tom** the homeowner has a chestnut quiff, a green knit jumper with a white collar and jeans, and wears no hat or glasses. **Lawrence** has a navy cap, a beard and a hi-vis vest. A ginger-haired crew member completes the team. |
 | Tile mascot for the CTA | An original **block-paver mascot** with a face, blush, a wink and waving arms |
-| Night, navy and warm practicals | Rainy night for the "problem" scenes, a warm blue-hour dusk for the "solution" scenes |
+| Night, navy and warm practicals | Overcast grey day for the "problem" scenes, bright sunny day for the "solution" scenes (client request: daytime); the end card keeps the dark sparkle backdrop |
 | Word-by-word captions with orange underlines | The same treatment, using the verbatim VO and real word timestamps |
 | Cream stacked cards | Risk cards (orange, orange, red), trust cards with green checks, a map card, a logo card, service chips, and a "PROJECT CHECK" card (after the reference's ROOF REPORT) |
 | Whip-blur transitions, sharp captions | Horizontal, vertical and zoom whips plus blur dissolves, with captions composited after the blur |

@@ -5,7 +5,7 @@ import random
 
 from character import Character
 from lib import FPS, empty, glow, kf, mat, rbox, sphere, world
-from sets import (BRINDLE, LAY_FRONT, area, broom, cam_move, camera, front_set,
+from sets import (BRINDLE, LAY_FRONT, area, broom, lights_day, cam_move, camera, front_set,
                   garden_set, laying_gaps, lights_dusk, lights_night, mallet,
                   mascot, pallet_stack, spirit_level, town_set, van)
 
@@ -16,13 +16,15 @@ def F(t):
 
 
 def night_world(scn):
-    world(scn, (0.01, 0.015, 0.04), (0.003, 0.004, 0.01))
-    lights_night(scn)
+    """Opening 'problem' scenes: overcast grey daytime."""
+    world(scn, (0.42, 0.47, 0.55), (0.62, 0.64, 0.66), 1.0)
+    lights_day(scn, overcast=True)
 
 
 def dusk_world(scn):
-    world(scn, (0.02, 0.03, 0.08), (0.16, 0.07, 0.04), 1.0)
-    lights_dusk(scn)
+    """'Solution' scenes: bright sunny daytime."""
+    world(scn, (0.08, 0.28, 0.95), (0.5, 0.68, 0.98), 1.3)
+    lights_day(scn)
 
 
 def char_light(target, loc, energy=120, color=(1.0, 0.8, 0.62), size=1.5):
@@ -121,9 +123,7 @@ def s2_worry(scn, nf):
 
 
 def s3_region(scn, nf):
-    world(scn, (0.02, 0.03, 0.09), (0.12, 0.06, 0.06), 1.2)
-    lights_dusk(scn)
-    scn.view_settings.exposure = -0.5
+    dusk_world(scn)
     town_set()
     pin = empty("pin", (0, -3.5, 9.0))
     orange = glow("PinOrange", (1.0, 0.33, 0.1), 2.0)
@@ -298,7 +298,6 @@ def s6a_drive(scn, nf):
 
 def s6b_patio(scn, nf):
     dusk_world(scn)
-    scn.view_settings.exposure = -1.0
     garden_set()
     cam, tg = camera(scn, 30, 3.5)
     cam_move(cam, tg, [(1, (-3.4, -6.4, 1.7), (-0.9, -2.1, 0.55), 30),
@@ -307,7 +306,6 @@ def s6b_patio(scn, nf):
 
 def s6c_hardland(scn, nf):
     dusk_world(scn)
-    scn.view_settings.exposure = -1.0
     garden_set()
     cam, tg = camera(scn, 28, 3.5)
     cam_move(cam, tg, [(1, (4.6, -6.6, 0.7), (3.6, -2.6, 0.55), 30),
