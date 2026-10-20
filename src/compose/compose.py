@@ -30,7 +30,8 @@ PROJECT = sys.argv[sys.argv.index("--project") + 1] if "--project" in sys.argv e
 CONF = os.path.join(ROOT, PROJECT, "config") if PROJECT else os.path.join(ROOT, "config")
 TL = json.load(open(os.path.join(CONF, "timeline.json")))
 OV = json.load(open(os.path.join(CONF, "overlays.json")))
-RENDERS = os.path.join(ROOT, TL.get("renders", "renders"))
+RENDERS = os.path.join(ROOT, sys.argv[sys.argv.index("--renders") + 1] if "--renders" in sys.argv
+                       else TL.get("renders", "renders"))
 FPS = TL["fps"]
 W, H = TL["width"], TL["height"]
 HANDLE = 6
@@ -800,6 +801,7 @@ def main():
     ap.add_argument("--out", default=os.path.join(ROOT, "output", "sureshield_roofing_tiktok.mp4"))
     ap.add_argument("--start", type=float, default=0.0)
     ap.add_argument("--project", default="")
+    ap.add_argument("--renders", default=None, help="override render folder (e.g. a draft pass)")
     ap.add_argument("--split", action="store_true", help="side-by-side raw render vs final edit")
     ap.add_argument("--end", type=float, default=None)
     a = ap.parse_args()
