@@ -98,11 +98,12 @@ def load_render(shot_id, f):
         if im.size != (540, 960):  # shots may be rendered at different percentages
             im = im.resize((540, 960), Image.LANCZOS)
         return np.asarray(im, dtype=np.float32)
-    # rendered on twos: blend the neighbours
-    a = os.path.join(d, f"{f - 1:04d}.png")
-    b = os.path.join(d, f"{f + 1:04d}.png")
-    if os.path.exists(a) and os.path.exists(b):
-        return (load_render(shot_id, f - 1) + load_render(shot_id, f + 1)) * 0.5
+    # rendered on twos/threes: blend the nearest rendered neighbours
+    prev = next((c for c in range(f - 1, f - 4, -1) if os.path.exists(os.path.join(d, f"{c:04d}.png"))), None)
+    nxt = next((c for c in range(f + 1, f + 4) if os.path.exists(os.path.join(d, f"{c:04d}.png"))), None)
+    if prev and nxt:
+        w = (f - prev) / (nxt - prev)
+        return load_render(shot_id, prev) * (1 - w) + load_render(shot_id, nxt) * w
     for k in range(1, 4):
         for c in (f - k, f + k):
             q = os.path.join(d, f"{c:04d}.png")
