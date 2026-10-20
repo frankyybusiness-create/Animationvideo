@@ -33,6 +33,8 @@ OV = json.load(open(os.path.join(CONF, "overlays.json")))
 RENDERS = os.path.join(ROOT, sys.argv[sys.argv.index("--renders") + 1] if "--renders" in sys.argv
                        else TL.get("renders", "renders"))
 FPS = TL["fps"]
+PW, PH = TL.get("plate", [540, 960])  # resolution of the 3D render plates
+PS = PW / 540  # scale for pixel-based effects tuned at 540 wide
 W, H = TL["width"], TL["height"]
 HANDLE = 6
 FONT_DIR = "/usr/share/fonts/opentype/inter"
@@ -96,8 +98,8 @@ def load_render(shot_id, f):
     p = os.path.join(d, f"{f:04d}.png")
     if os.path.exists(p):
         im = Image.open(p).convert("RGB")
-        if im.size != (540, 960):  # shots may be rendered at different percentages
-            im = im.resize((540, 960), Image.LANCZOS)
+        if im.size != (PW, PH):  # shots may be rendered at different percentages
+            im = im.resize((PW, PH), Image.LANCZOS)
         return np.asarray(im, dtype=np.float32)
     # rendered on twos/threes: blend the nearest rendered neighbours
     prev = next((c for c in range(f - 1, f - 4, -1) if os.path.exists(os.path.join(d, f"{c:04d}.png"))), None)
@@ -111,9 +113,9 @@ def load_render(shot_id, f):
             if os.path.exists(q):
                 return load_render(shot_id, c)
     if PLACEHOLDER:
-        g = np.linspace(0, 1, 960, dtype=np.float32)[:, None, None]
+        g = np.linspace(0, 1, PH, dtype=np.float32)[:, None, None]
         img = (np.array([6, 9, 22], np.float32) * (1 - g) + np.array([40, 30, 40], np.float32) * g)
-        return np.broadcast_to(img, (960, 540, 3)).copy()
+        return np.broadcast_to(img, (PH, PW, 3)).copy()
     raise FileNotFoundError(p)
 
 
@@ -155,7 +157,7 @@ def base_image(t):
             kind = OV["transitions"].get(f"{A['id']}>{B['id']}", OV["transitions"]["default"])
             fa, fb = shot_frame(A, t), shot_frame(B, t)
             if kind == "defocus":
-                bl = math.sin(math.pi * p) * 14
+                bl = math.sin(math.pi * p) * 14 * PS
                 m = ease_in_out(p)
                 return gblur(fa, bl) * (1 - m) + gblur(fb, bl) * m
             # whip pan: A exits left, B enters from the right, heavy motion blur
@@ -163,7 +165,7 @@ def base_image(t):
             w = fa.shape[1]
             sh = int(e * w)
             canvas = np.concatenate([fa, fb], axis=1)[:, sh:sh + w]
-            return hblur(canvas, math.sin(math.pi * p) * 95)
+            return hblur(canvas, math.sin(math.pi * p) * 95 * PS)
     return shot_frame(SHOTS[idx], t)
 
 
@@ -746,7 +748,7 @@ def label_bar(text, w):
 def split_frame(i):
     """Editing breakdown: raw 3D render (left) vs finished edit (right)."""
     t = i / FPS
-    raw = Image.fromarray(np.clip(base_image(t), 0, 255).astype(np.uint8)).resize((540, 960), Image.LANCZOS)
+    raw = Image.fromarray(np.clip(base_image(t), 0, 255).astype(np.uint8)).resize((540, 960), Image.LANCZOS)  # split view
     fin = compose_frame(i).resize((540, 960), Image.LANCZOS)
     out = Image.new("RGB", (W, 1024), (12, 14, 20))
     out.paste(label_bar("RAW 3D RENDER", 540), (0, 0))
@@ -764,9 +766,11 @@ def compose_frame(i):
     for ip in panels():
         if ip["in"] - 0.1 <= t <= ip["out"] + 0.25:
             k = clamp((t - ip["in"] + 0.1) / 0.3) * (1 - clamp((t - ip["out"]) / 0.25))
-            plate = gblur(plate, 3 * k) * (1 - 0.3 * k)
-    img = Image.fromarray(np.clip(plate, 0, 255).astype(np.uint8)).resize((W, H), Image.LANCZOS)
-    img = img.filter(ImageFilter.UnsharpMask(radius=2, percent=70, threshold=2))  # restore crispness after upscale
+            plate = gblur(plate, 3 * k * PS) * (1 - 0.3 * k)
+    img = Image.fromarray(np.clip(plate, 0, 255).astype(np.uint8))
+    if img.size != (W, H):
+        img = img.resize((W, H), Image.LANCZOS)
+        img = img.filter(ImageFilter.UnsharpMask(radius=2, percent=70, threshold=2))  # restore crispness after upscale
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     rain = OV.get("rain") or {k: 0.0 for k in OV.get("rain_shots", [])}
     if sid in rain and t >= rain[sid]:

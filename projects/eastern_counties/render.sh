@@ -4,9 +4,9 @@
 set -e
 cd "$(dirname "$0")/../.."
 PY=${PY:-python3}
-PCT=${1:-50}
-SMP=${2:-10}
-OUT=renders/eastern_counties
+PCT=${1:-100}
+SMP=${2:-6}
+OUT=$(python3 -c "import json;print(json.load(open('projects/eastern_counties/config/timeline.json'))['renders'])")
 mkdir -p $OUT
 [ -f $OUT/pavedetail/0001.png ] || $PY src/scene3d/eastern.py --shot pavedetail --pct 100 --samples 48 --out $OUT/pavedetail >/dev/null 2>&1
 for s in $(python3 -c "import json;print(' '.join(f\"{x['id']}:{x['step']}\" for x in json.load(open('projects/eastern_counties/config/timeline.json'))['shots']))"); do

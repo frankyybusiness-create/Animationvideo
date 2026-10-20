@@ -6,7 +6,7 @@
  "audio_duration": 45.56,
  "tail_hold": 1.04,
  "total_duration": 46.6,
- "renders": "renders/eastern_counties",
+ "renders": "renders/ec_1080",
  "shots": [
   {
    "id": "e1",
@@ -113,5 +113,9 @@
    "desc": "Closing: finished home, Linda waves, CTA"
   }
  ],
- "audio_mix": "projects/eastern_counties/assets/soundtrack/mix.wav"
+ "audio_mix": "projects/eastern_counties/assets/soundtrack/mix.wav",
+ "plate": [
+  1080,
+  1920
+ ]
 }

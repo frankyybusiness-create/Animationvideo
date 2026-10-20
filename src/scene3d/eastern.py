@@ -364,7 +364,7 @@ def e6b():
     for i, x in enumerate((-3.0, 3.0)):
         L.traffic_cone(f"cone{i}", (x, -8.9, 0))
     p1 = L.Character("p1", "paver1", loc=(-0.2, -6.3, 0), rot_z=math.radians(-10))
-    p2 = L.Character("p2", "paver2", loc=(1.6, -7.2, 0), rot_z=math.radians(200))
+    p2 = L.Character("p2", "paver2", loc=(2.7, -6.6, 0), rot_z=math.radians(210))
     kneel(p2)
     a = L.Character("linda", "linda", loc=(-2.3, -5.3, 0), rot_z=math.radians(25))
     for ch, sd in ((p1, 31), (p2, 32), (a, 33)):
@@ -593,8 +593,9 @@ def e10():
     cam = L.camera(lens=44, fstop=1.0)
     fe = focus_empty("fo", [(1, (0.9, -6.9, 2.3)), (n, (0.9, -6.9, 2.3))])
     cam.data.dof.focus_object = fe
-    L.cam_key(cam, 1, (-0.4, -15.4, 2.4), (0.4, -3.0, 4.0))
-    L.cam_key(cam, n, (0.1, -14.0, 2.3), (0.5, -3.0, 3.85))
+    # Linda framed in the upper-middle so the CTA block below never covers her
+    L.cam_key(cam, 1, (-0.3, -15.6, 1.2), (0.5, -3.0, 1.55))
+    L.cam_key(cam, n, (0.1, -14.4, 1.15), (0.6, -3.0, 1.45))
     L.area_light("key", (-4, -12, 4), (0.9, -6.9, 2.2), 420, "#ffc596", size=3)
     L.area_light("rimC", (3.5, -4.8, 4.5), (0.9, -6.9, 2.2), 380, "#86a8ff", size=2.5)
     L.area_light("houseK", (-3, -10, 8), (0, -4, 2.5), 600, "#ffc596", size=4)
@@ -669,6 +670,7 @@ def main():
     ap.add_argument("--samples", type=int, default=10)
     ap.add_argument("--frames", default=None)
     ap.add_argument("--step", type=int, default=1)
+    ap.add_argument("--lean", action="store_true", help="fewer light bounces (faster at high resolution)")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     L.reset_scene()
@@ -680,6 +682,12 @@ def main():
         daytime()
     L.render_settings(a.pct, a.samples, 1, n)
     scn = bpy.context.scene
+    if a.lean:
+        scn.cycles.max_bounces = 3
+        scn.cycles.diffuse_bounces = 1
+        scn.cycles.glossy_bounces = 1
+        scn.cycles.transmission_bounces = 2
+        scn.cycles.adaptive_threshold = 0.05
     if "res" in scn.keys():
         scn.render.resolution_x, scn.render.resolution_y = scn["res"]
     os.makedirs(a.out, exist_ok=True)
