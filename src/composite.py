@@ -204,13 +204,13 @@ def map_card():
     mpc.paste(mp, (0, 0), m)
     card.alpha_composite(mpc, (25, 25))
     d = ImageDraw.Draw(card)
-    d.text((310, 52), "Serving", font=font("Medium", 30), fill=GREY)
-    d.text((308, 92), "PE12 7LD", font=font("Bold", 64), fill=INK)
-    d.text((310, 172), "& all surrounding areas", font=font("Medium", 30), fill=GREY)
-    chip = rrect(250, 50, 25, ORANGE + (255,))
-    ImageDraw.Draw(chip).text((125, 26), "30-MILE RADIUS", font=font("ExtraBold", 24),
+    d.text((306, 26), "Serving", font=font("Medium", 26), fill=GREY)
+    for i, region in enumerate(("Lincolnshire", "Northern Cambridgeshire", "Western Norfolk")):
+        d.text((304, 60 + i * 50), region, font=font("Bold", 38), fill=INK)
+    chip = rrect(360, 46, 23, ORANGE + (255,))
+    ImageDraw.Draw(chip).text((180, 24), "PE12 7LD · 30-MILE RADIUS", font=font("ExtraBold", 21),
                               fill=WHITE, anchor="mm")
-    card.alpha_composite(chip, (310, 222))
+    card.alpha_composite(chip, (306, 226))
     return card, (25, 25, mw)
 
 

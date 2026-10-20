@@ -71,7 +71,8 @@ CARDS = [
         {"t": 5.45, "num": "3", "title": "Surprise extras", "sub": "costs added at the end",
          "accent": "red"}]},
     {"kind": "map", "start": 7.25, "end": 9.15, "title": "PE12 7LD",
-     "sub": "& surrounding areas · 30-mile radius"},
+     "regions": ["Lincolnshire", "Northern Cambridgeshire", "Western Norfolk"],
+     "sub": "30-mile radius"},
     {"kind": "logo", "start": 10.0, "end": 13.25},
     {"kind": "tag", "start": 12.25, "end": 13.25, "text": "BUILT ON TRUST", "color": "orange"},
     {"kind": "stack", "start": 14.75, "end": 18.9, "check": True, "items": [

@@ -950,7 +950,12 @@
    "start": 7.25,
    "end": 9.15,
    "title": "PE12 7LD",
-   "sub": "& surrounding areas \u00b7 30-mile radius"
+   "regions": [
+    "Lincolnshire",
+    "Northern Cambridgeshire",
+    "Western Norfolk"
+   ],
+   "sub": "30-mile radius"
   },
   {
    "kind": "logo",
