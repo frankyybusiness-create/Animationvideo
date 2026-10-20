@@ -94,7 +94,10 @@ def load_render(shot_id, f):
     d = os.path.join(RENDERS, shot_id)
     p = os.path.join(d, f"{f:04d}.png")
     if os.path.exists(p):
-        return np.asarray(Image.open(p).convert("RGB"), dtype=np.float32)
+        im = Image.open(p).convert("RGB")
+        if im.size != (540, 960):  # shots may be rendered at different percentages
+            im = im.resize((540, 960), Image.LANCZOS)
+        return np.asarray(im, dtype=np.float32)
     # rendered on twos: blend the neighbours
     a = os.path.join(d, f"{f - 1:04d}.png")
     b = os.path.join(d, f"{f + 1:04d}.png")

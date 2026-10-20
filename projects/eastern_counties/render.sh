@@ -11,6 +11,6 @@ mkdir -p $OUT
 [ -f $OUT/pavedetail/0001.png ] || $PY src/scene3d/eastern.py --shot pavedetail --pct 100 --samples 48 --out $OUT/pavedetail >/dev/null 2>&1
 for s in $(python3 -c "import json;print(' '.join(f\"{x['id']}:{x['step']}\" for x in json.load(open('projects/eastern_counties/config/timeline.json'))['shots']))"); do
   id=${s%%:*}; st=${s##*:}
-  $PY src/scene3d/eastern.py --shot $id --pct $PCT --samples $SMP --step $st --out $OUT/$id 2>&1 | grep --line-buffered "\] frame"
+  $PY src/scene3d/eastern.py --shot $id --pct $PCT --samples $SMP --step $st --out $OUT/$id 2>&1 | grep --line-buffered "\] frame" || true
 done
 echo done
