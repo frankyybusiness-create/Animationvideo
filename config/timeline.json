@@ -1,0 +1,1054 @@
+{
+ "fps": 30,
+ "width": 1080,
+ "height": 1920,
+ "duration": 37.0,
+ "total_frames": 1110,
+ "audio": "assets/audio/voiceover.mp3",
+ "shots": [
+  {
+   "name": "s1_exterior",
+   "start": 0.0,
+   "end": 3.85,
+   "frame_start": 0,
+   "frames": 116,
+   "transition_out": "blur"
+  },
+  {
+   "name": "s2_worry",
+   "start": 3.85,
+   "end": 6.75,
+   "frame_start": 116,
+   "frames": 86,
+   "transition_out": "whip_left"
+  },
+  {
+   "name": "s3_region",
+   "start": 6.75,
+   "end": 9.15,
+   "frame_start": 202,
+   "frames": 72,
+   "transition_out": "zoom"
+  },
+  {
+   "name": "s4_team",
+   "start": 9.15,
+   "end": 13.25,
+   "frame_start": 274,
+   "frames": 124,
+   "transition_out": "whip_left"
+  },
+  {
+   "name": "s5a_laying",
+   "start": 13.25,
+   "end": 15.95,
+   "frame_start": 398,
+   "frames": 80,
+   "transition_out": "whip_up"
+  },
+  {
+   "name": "s5b_level",
+   "start": 15.95,
+   "end": 18.9,
+   "frame_start": 478,
+   "frames": 89,
+   "transition_out": "whip_left"
+  },
+  {
+   "name": "s6a_drive",
+   "start": 18.9,
+   "end": 20.95,
+   "frame_start": 567,
+   "frames": 61,
+   "transition_out": "whip_left"
+  },
+  {
+   "name": "s6b_patio",
+   "start": 20.95,
+   "end": 22.4,
+   "frame_start": 628,
+   "frames": 44,
+   "transition_out": "whip_left"
+  },
+  {
+   "name": "s6c_hardland",
+   "start": 22.4,
+   "end": 24.2,
+   "frame_start": 672,
+   "frames": 54,
+   "transition_out": "whip_left"
+  },
+  {
+   "name": "s7_finish",
+   "start": 24.2,
+   "end": 28.35,
+   "frame_start": 726,
+   "frames": 124,
+   "transition_out": "whip_left"
+  },
+  {
+   "name": "s8_reveal",
+   "start": 28.35,
+   "end": 31.65,
+   "frame_start": 850,
+   "frames": 100,
+   "transition_out": "blur"
+  },
+  {
+   "name": "s9_cta",
+   "start": 31.65,
+   "end": 37.0,
+   "frame_start": 950,
+   "frames": 160,
+   "transition_out": null
+  }
+ ],
+ "captions": [
+  {
+   "start": 0.0,
+   "words": [
+    {
+     "text": "When",
+     "hl": false,
+     "s": 0.0,
+     "e": 0.24
+    },
+    {
+     "text": "you're",
+     "hl": false,
+     "s": 0.24,
+     "e": 0.38
+    },
+    {
+     "text": "investing",
+     "hl": false,
+     "s": 0.38,
+     "e": 0.68
+    },
+    {
+     "text": "in",
+     "hl": false,
+     "s": 0.68,
+     "e": 0.92
+    },
+    {
+     "text": "your",
+     "hl": false,
+     "s": 0.92,
+     "e": 1.04
+    },
+    {
+     "text": "home's",
+     "hl": true,
+     "s": 1.04,
+     "e": 1.34
+    },
+    {
+     "text": "exterior,",
+     "hl": true,
+     "s": 1.34,
+     "e": 1.8
+    }
+   ],
+   "end": 2.04
+  },
+  {
+   "start": 2.04,
+   "words": [
+    {
+     "text": "letting",
+     "hl": false,
+     "s": 2.04,
+     "e": 2.2
+    },
+    {
+     "text": "an",
+     "hl": false,
+     "s": 2.2,
+     "e": 2.4
+    },
+    {
+     "text": "unreliable",
+     "hl": true,
+     "s": 2.4,
+     "e": 2.78
+    },
+    {
+     "text": "contractor",
+     "hl": true,
+     "s": 2.78,
+     "e": 3.48
+    },
+    {
+     "text": "touch",
+     "hl": false,
+     "s": 3.48,
+     "e": 3.66
+    },
+    {
+     "text": "your",
+     "hl": false,
+     "s": 3.66,
+     "e": 3.86
+    },
+    {
+     "text": "property",
+     "hl": false,
+     "s": 3.86,
+     "e": 4.14
+    }
+   ],
+   "end": 4.14
+  },
+  {
+   "start": 4.14,
+   "words": [
+    {
+     "text": "is",
+     "hl": false,
+     "s": 4.14,
+     "e": 4.32
+    },
+    {
+     "text": "a",
+     "hl": false,
+     "s": 4.32,
+     "e": 4.48
+    },
+    {
+     "text": "massive",
+     "hl": true,
+     "s": 4.48,
+     "e": 4.72
+    },
+    {
+     "text": "risk",
+     "hl": true,
+     "s": 4.72,
+     "e": 5.04
+    },
+    {
+     "text": "that",
+     "hl": false,
+     "s": 5.04,
+     "e": 5.22
+    },
+    {
+     "text": "no",
+     "hl": false,
+     "s": 5.22,
+     "e": 5.46
+    },
+    {
+     "text": "homeowner",
+     "hl": false,
+     "s": 5.46,
+     "e": 5.8
+    },
+    {
+     "text": "wants",
+     "hl": false,
+     "s": 5.8,
+     "e": 6.08
+    },
+    {
+     "text": "to",
+     "hl": false,
+     "s": 6.08,
+     "e": 6.28
+    },
+    {
+     "text": "take.",
+     "hl": false,
+     "s": 6.28,
+     "e": 6.56
+    }
+   ],
+   "end": 6.88
+  },
+  {
+   "start": 6.88,
+   "words": [
+    {
+     "text": "Across",
+     "hl": false,
+     "s": 6.88,
+     "e": 7.1
+    },
+    {
+     "text": "the",
+     "hl": false,
+     "s": 7.1,
+     "e": 7.32
+    },
+    {
+     "text": "region",
+     "hl": true,
+     "s": 7.32,
+     "e": 7.64
+    },
+    {
+     "text": "and",
+     "hl": false,
+     "s": 7.64,
+     "e": 7.84
+    },
+    {
+     "text": "all",
+     "hl": false,
+     "s": 7.84,
+     "e": 8.0
+    },
+    {
+     "text": "surrounding",
+     "hl": false,
+     "s": 8.0,
+     "e": 8.34
+    },
+    {
+     "text": "areas,",
+     "hl": false,
+     "s": 8.34,
+     "e": 8.84
+    }
+   ],
+   "end": 9.22
+  },
+  {
+   "start": 9.22,
+   "words": [
+    {
+     "text": "Lawrence",
+     "hl": true,
+     "s": 9.22,
+     "e": 9.36
+    },
+    {
+     "text": "and",
+     "hl": false,
+     "s": 9.36,
+     "e": 9.58
+    },
+    {
+     "text": "the",
+     "hl": false,
+     "s": 9.58,
+     "e": 9.7
+    },
+    {
+     "text": "team",
+     "hl": false,
+     "s": 9.7,
+     "e": 9.92
+    },
+    {
+     "text": "at",
+     "hl": false,
+     "s": 9.92,
+     "e": 10.08
+    },
+    {
+     "text": "Fenland",
+     "hl": true,
+     "s": 10.08,
+     "e": 10.4
+    },
+    {
+     "text": "Drives",
+     "hl": true,
+     "s": 10.4,
+     "e": 10.76
+    },
+    {
+     "text": "and",
+     "hl": true,
+     "s": 10.76,
+     "e": 10.9
+    },
+    {
+     "text": "Patios",
+     "hl": true,
+     "s": 10.9,
+     "e": 11.24
+    },
+    {
+     "text": "Ltd",
+     "hl": true,
+     "s": 11.24,
+     "e": 11.44
+    }
+   ],
+   "end": 11.44
+  },
+  {
+   "start": 11.44,
+   "words": [
+    {
+     "text": "have",
+     "hl": false,
+     "s": 11.44,
+     "e": 11.92
+    },
+    {
+     "text": "built",
+     "hl": false,
+     "s": 11.92,
+     "e": 12.1
+    },
+    {
+     "text": "a",
+     "hl": false,
+     "s": 12.1,
+     "e": 12.28
+    },
+    {
+     "text": "rock-solid",
+     "hl": true,
+     "s": 12.28,
+     "e": 12.76
+    },
+    {
+     "text": "reputation",
+     "hl": true,
+     "s": 12.76,
+     "e": 13.3
+    }
+   ],
+   "end": 13.3
+  },
+  {
+   "start": 13.3,
+   "words": [
+    {
+     "text": "on",
+     "hl": false,
+     "s": 13.3,
+     "e": 13.58
+    },
+    {
+     "text": "absolute",
+     "hl": false,
+     "s": 13.58,
+     "e": 14.02
+    },
+    {
+     "text": "trust,",
+     "hl": true,
+     "s": 14.02,
+     "e": 14.42
+    },
+    {
+     "text": "transparent",
+     "hl": true,
+     "s": 14.8,
+     "e": 15.06
+    },
+    {
+     "text": "pricing",
+     "hl": true,
+     "s": 15.06,
+     "e": 15.62
+    }
+   ],
+   "end": 15.62
+  },
+  {
+   "start": 15.62,
+   "words": [
+    {
+     "text": "and",
+     "hl": false,
+     "s": 15.62,
+     "e": 15.86
+    },
+    {
+     "text": "elite",
+     "hl": true,
+     "s": 15.86,
+     "e": 16.12
+    },
+    {
+     "text": "craftsmanship",
+     "hl": true,
+     "s": 16.12,
+     "e": 16.72
+    },
+    {
+     "text": "with",
+     "hl": false,
+     "s": 16.72,
+     "e": 16.98
+    },
+    {
+     "text": "zero",
+     "hl": true,
+     "s": 16.98,
+     "e": 17.28
+    },
+    {
+     "text": "cut",
+     "hl": true,
+     "s": 17.28,
+     "e": 17.56
+    },
+    {
+     "text": "corners",
+     "hl": true,
+     "s": 17.56,
+     "e": 17.88
+    }
+   ],
+   "end": 17.88
+  },
+  {
+   "start": 17.88,
+   "words": [
+    {
+     "text": "or",
+     "hl": false,
+     "s": 17.88,
+     "e": 18.06
+    },
+    {
+     "text": "hidden",
+     "hl": true,
+     "s": 18.06,
+     "e": 18.24
+    },
+    {
+     "text": "fees.",
+     "hl": true,
+     "s": 18.24,
+     "e": 18.64
+    }
+   ],
+   "end": 19.1
+  },
+  {
+   "start": 19.1,
+   "words": [
+    {
+     "text": "Whether",
+     "hl": false,
+     "s": 19.1,
+     "e": 19.26
+    },
+    {
+     "text": "you",
+     "hl": false,
+     "s": 19.26,
+     "e": 19.46
+    },
+    {
+     "text": "need",
+     "hl": false,
+     "s": 19.46,
+     "e": 19.6
+    },
+    {
+     "text": "a",
+     "hl": false,
+     "s": 19.6,
+     "e": 19.72
+    },
+    {
+     "text": "stunning",
+     "hl": false,
+     "s": 19.72,
+     "e": 20.02
+    },
+    {
+     "text": "new",
+     "hl": false,
+     "s": 20.02,
+     "e": 20.3
+    },
+    {
+     "text": "driveway,",
+     "hl": true,
+     "s": 20.3,
+     "e": 20.74
+    }
+   ],
+   "end": 21.04
+  },
+  {
+   "start": 21.04,
+   "words": [
+    {
+     "text": "a",
+     "hl": false,
+     "s": 21.04,
+     "e": 21.12
+    },
+    {
+     "text": "durable",
+     "hl": false,
+     "s": 21.12,
+     "e": 21.42
+    },
+    {
+     "text": "patio",
+     "hl": true,
+     "s": 21.42,
+     "e": 21.82
+    },
+    {
+     "text": "installation",
+     "hl": false,
+     "s": 21.82,
+     "e": 22.3
+    }
+   ],
+   "end": 22.3
+  },
+  {
+   "start": 22.3,
+   "words": [
+    {
+     "text": "or",
+     "hl": false,
+     "s": 22.3,
+     "e": 22.7
+    },
+    {
+     "text": "expert",
+     "hl": false,
+     "s": 22.7,
+     "e": 23.18
+    },
+    {
+     "text": "hard",
+     "hl": true,
+     "s": 23.18,
+     "e": 23.44
+    },
+    {
+     "text": "landscaping,",
+     "hl": true,
+     "s": 23.44,
+     "e": 24.1
+    }
+   ],
+   "end": 24.28
+  },
+  {
+   "start": 24.28,
+   "words": [
+    {
+     "text": "our",
+     "hl": false,
+     "s": 24.28,
+     "e": 24.4
+    },
+    {
+     "text": "experienced",
+     "hl": true,
+     "s": 24.4,
+     "e": 24.88
+    },
+    {
+     "text": "local",
+     "hl": true,
+     "s": 24.88,
+     "e": 25.1
+    },
+    {
+     "text": "team",
+     "hl": true,
+     "s": 25.1,
+     "e": 25.48
+    },
+    {
+     "text": "handles",
+     "hl": false,
+     "s": 25.48,
+     "e": 25.82
+    },
+    {
+     "text": "your",
+     "hl": false,
+     "s": 25.82,
+     "e": 26.02
+    },
+    {
+     "text": "property",
+     "hl": false,
+     "s": 26.02,
+     "e": 26.32
+    }
+   ],
+   "end": 26.32
+  },
+  {
+   "start": 26.32,
+   "words": [
+    {
+     "text": "with",
+     "hl": false,
+     "s": 26.32,
+     "e": 26.58
+    },
+    {
+     "text": "the",
+     "hl": false,
+     "s": 26.58,
+     "e": 26.72
+    },
+    {
+     "text": "precision",
+     "hl": true,
+     "s": 26.72,
+     "e": 27.06
+    },
+    {
+     "text": "and",
+     "hl": false,
+     "s": 27.06,
+     "e": 27.36
+    },
+    {
+     "text": "care",
+     "hl": true,
+     "s": 27.36,
+     "e": 27.58
+    },
+    {
+     "text": "it",
+     "hl": false,
+     "s": 27.58,
+     "e": 27.85
+    },
+    {
+     "text": "deserves,",
+     "hl": false,
+     "s": 27.85,
+     "e": 28.17
+    }
+   ],
+   "end": 28.41
+  },
+  {
+   "start": 28.41,
+   "words": [
+    {
+     "text": "so",
+     "hl": false,
+     "s": 28.41,
+     "e": 28.43
+    },
+    {
+     "text": "you",
+     "hl": false,
+     "s": 28.43,
+     "e": 28.55
+    },
+    {
+     "text": "can",
+     "hl": false,
+     "s": 28.55,
+     "e": 28.67
+    },
+    {
+     "text": "transform",
+     "hl": true,
+     "s": 28.67,
+     "e": 29.07
+    },
+    {
+     "text": "your",
+     "hl": false,
+     "s": 29.07,
+     "e": 29.29
+    },
+    {
+     "text": "outdoor",
+     "hl": true,
+     "s": 29.29,
+     "e": 29.57
+    },
+    {
+     "text": "space",
+     "hl": true,
+     "s": 29.57,
+     "e": 29.89
+    }
+   ],
+   "end": 29.89
+  },
+  {
+   "start": 29.89,
+   "words": [
+    {
+     "text": "with",
+     "hl": false,
+     "s": 29.89,
+     "e": 30.11
+    },
+    {
+     "text": "complete",
+     "hl": false,
+     "s": 30.11,
+     "e": 30.49
+    },
+    {
+     "text": "peace",
+     "hl": true,
+     "s": 30.49,
+     "e": 30.75
+    },
+    {
+     "text": "of",
+     "hl": true,
+     "s": 30.75,
+     "e": 30.93
+    },
+    {
+     "text": "mind.",
+     "hl": true,
+     "s": 30.93,
+     "e": 31.23
+    }
+   ],
+   "end": 31.79
+  },
+  {
+   "start": 31.79,
+   "words": [
+    {
+     "text": "Stop",
+     "hl": true,
+     "s": 31.79,
+     "e": 31.93
+    },
+    {
+     "text": "gambling",
+     "hl": true,
+     "s": 31.93,
+     "e": 32.27
+    },
+    {
+     "text": "on",
+     "hl": false,
+     "s": 32.27,
+     "e": 32.47
+    },
+    {
+     "text": "uncertain",
+     "hl": false,
+     "s": 32.47,
+     "e": 32.89
+    },
+    {
+     "text": "contractors",
+     "hl": false,
+     "s": 32.89,
+     "e": 33.47
+    }
+   ],
+   "end": 33.47
+  },
+  {
+   "start": 33.47,
+   "words": [
+    {
+     "text": "and",
+     "hl": false,
+     "s": 33.47,
+     "e": 33.75
+    },
+    {
+     "text": "secure",
+     "hl": false,
+     "s": 33.75,
+     "e": 34.03
+    },
+    {
+     "text": "your",
+     "hl": false,
+     "s": 34.03,
+     "e": 34.23
+    },
+    {
+     "text": "free,",
+     "hl": true,
+     "s": 34.23,
+     "e": 34.59
+    },
+    {
+     "text": "no-obligation",
+     "hl": false,
+     "s": 34.77,
+     "e": 35.47
+    },
+    {
+     "text": "quote",
+     "hl": true,
+     "s": 35.47,
+     "e": 35.71
+    },
+    {
+     "text": "today.",
+     "hl": true,
+     "s": 35.71,
+     "e": 36.05
+    }
+   ],
+   "end": 37.0
+  }
+ ],
+ "cards": [
+  {
+   "kind": "tag",
+   "start": 4.15,
+   "end": 6.75,
+   "text": "DON'T RISK YOUR PROPERTY",
+   "color": "red"
+  },
+  {
+   "kind": "stack",
+   "start": 4.45,
+   "end": 6.75,
+   "items": [
+    {
+     "t": 4.45,
+     "num": "1",
+     "title": "Sinking blocks",
+     "sub": "uneven, poorly prepared base",
+     "accent": "orange"
+    },
+    {
+     "t": 4.95,
+     "num": "2",
+     "title": "Weeds & cracks",
+     "sub": "gaps left in the joints",
+     "accent": "orange"
+    },
+    {
+     "t": 5.45,
+     "num": "3",
+     "title": "Surprise extras",
+     "sub": "costs added at the end",
+     "accent": "red"
+    }
+   ]
+  },
+  {
+   "kind": "map",
+   "start": 7.25,
+   "end": 9.15,
+   "title": "PE12 7LD",
+   "sub": "& surrounding areas \u00b7 30-mile radius"
+  },
+  {
+   "kind": "logo",
+   "start": 10.0,
+   "end": 13.25
+  },
+  {
+   "kind": "tag",
+   "start": 12.25,
+   "end": 13.25,
+   "text": "BUILT ON TRUST",
+   "color": "orange"
+  },
+  {
+   "kind": "stack",
+   "start": 14.75,
+   "end": 18.9,
+   "check": true,
+   "items": [
+    {
+     "t": 14.75,
+     "num": "",
+     "title": "Transparent pricing",
+     "sub": "clear quotes, explained up front",
+     "accent": "green"
+    },
+    {
+     "t": 15.85,
+     "num": "",
+     "title": "Quality craftsmanship",
+     "sub": "zero cut corners",
+     "accent": "green"
+    },
+    {
+     "t": 18.0,
+     "num": "",
+     "title": "No hidden fees",
+     "sub": "what you agree is what you pay",
+     "accent": "green"
+    }
+   ]
+  },
+  {
+   "kind": "chips",
+   "start": 20.0,
+   "end": 24.2,
+   "items": [
+    {
+     "t": 20.0,
+     "text": "STUNNING NEW DRIVEWAYS"
+    },
+    {
+     "t": 21.4,
+     "text": "DURABLE PATIOS"
+    },
+    {
+     "t": 23.2,
+     "text": "EXPERT HARD LANDSCAPING"
+    }
+   ]
+  },
+  {
+   "kind": "report",
+   "start": 25.0,
+   "end": 28.35,
+   "header": "PROJECT CHECK",
+   "badge": "DETAIL",
+   "foot": "Precision & care on every joint",
+   "image": "s5a_laying"
+  },
+  {
+   "kind": "tag",
+   "start": 28.65,
+   "end": 31.65,
+   "text": "TRANSFORM YOUR OUTDOOR SPACE",
+   "color": "orange"
+  },
+  {
+   "kind": "stack",
+   "start": 30.1,
+   "end": 31.65,
+   "check": true,
+   "items": [
+    {
+     "t": 30.1,
+     "num": "",
+     "title": "Complete peace of mind",
+     "sub": "local, experienced team",
+     "accent": "green"
+    }
+   ]
+  },
+  {
+   "kind": "cta",
+   "start": 32.0,
+   "end": 37.0,
+   "logo_t": 32.0,
+   "button_t": 33.9,
+   "button": "GET YOUR FREE QUOTE",
+   "sub_t": 34.6,
+   "sub": "FREE, NO-OBLIGATION QUOTE",
+   "phone": "07455 358300",
+   "web": "fenlanddrivesandpatios.co.uk",
+   "contact_t": 35.0
+  }
+ ],
+ "asr_text_corrections": [
+  [
+   "deserves,",
+   "reserves,"
+  ]
+ ]
+}

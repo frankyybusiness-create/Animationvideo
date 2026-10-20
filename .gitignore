@@ -1,0 +1,9 @@
+build/frames/
+build/preview/
+build/stills/
+build/test/
+build/*.png
+build/*.wav
+build/*.mp4
+build/*.log
+__pycache__/
