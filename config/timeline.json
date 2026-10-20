@@ -178,7 +178,13 @@
      "hl": true,
      "s": 2.78,
      "e": 3.48
-    },
+    }
+   ],
+   "end": 3.48
+  },
+  {
+   "start": 3.48,
+   "words": [
     {
      "text": "touch",
      "hl": false,
@@ -193,7 +199,7 @@
     },
     {
      "text": "property",
-     "hl": false,
+     "hl": true,
      "s": 3.86,
      "e": 4.14
     }
@@ -346,7 +352,13 @@
      "hl": false,
      "s": 9.92,
      "e": 10.08
-    },
+    }
+   ],
+   "end": 10.08
+  },
+  {
+   "start": 10.08,
+   "words": [
     {
      "text": "Fenland",
      "hl": true,

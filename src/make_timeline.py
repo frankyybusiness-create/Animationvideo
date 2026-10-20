@@ -15,10 +15,12 @@ DURATION = 37.0  # 36.2 s narration + short CTA hold
 # Verbatim transcript, chunked for on-screen captions. *word* = orange highlight.
 CHUNKS = [
     "When you're investing in your *home's* *exterior,*",
-    "letting an *unreliable* *contractor* touch your property",
+    "letting an *unreliable* *contractor*",
+    "touch your *property*",
     "is a *massive* *risk* that no homeowner wants to take.",
     "Across the *region* and all surrounding areas,",
-    "*Lawrence* and the team at *Fenland* *Drives* *and* *Patios* *Ltd*",
+    "*Lawrence* and the team at",
+    "*Fenland* *Drives* *and* *Patios* *Ltd*",
     "have built a *rock-solid* *reputation*",
     "on absolute *trust,* *transparent* *pricing*",
     "and *elite* *craftsmanship* with *zero* *cut* *corners*",
