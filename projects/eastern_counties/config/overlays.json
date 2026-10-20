@@ -1,58 +1,489 @@
 {
-  "_note": "Times in seconds on the voiceover timeline (config/voiceover_words.json). Caption words: [text, appear_time, highlight]; '\\n' = line break.",
-  "captions": [
-    {"out": 4.05,  "words": [["Cracks.", 2.02, true], ["Sinking.", 2.60, true], ["Wear.", 3.30, true]]},
-    {"out": 8.25,  "words": [["Costly", 5.86, false], ["structural", 6.36, false], ["\n", 6.7, false], ["damage.", 6.78, true]]},
-    {"out": 10.65, "words": [["Across", 8.56, false], ["Essex.", 8.78, true]]},
-    {"out": 15.10, "words": [["Built", 12.16, false], ["on", 13.66, false], ["trust.", 14.58, true]]},
-    {"out": 20.15, "words": [["Zero", 18.12, false], ["cut", 18.46, false], ["corners.", 18.68, true]]},
-    {"out": 22.95, "words": [["Seasonal", 21.00, false], ["slots", 21.72, false], ["\n", 22.0, false], ["filling", 22.06, true], ["fast.", 22.50, true]]},
-    {"out": 24.88, "words": [["Secure", 24.00, false], ["your", 24.34, false], ["property.", 24.56, true]]},
-    {"out": 26.95, "words": [["Before", 24.94, false], ["the", 25.34, false], ["weather", 25.50, true], ["turns.", 25.66, true]]},
-    {"out": 30.12, "words": [["Driveway", 28.72, false], ["\n", 29.0, false], ["transformations.", 29.14, true]]},
-    {"out": 31.35, "words": [["Patio", 30.34, false], ["overhauls.", 30.52, true]]},
-    {"out": 32.45, "words": [["Precision", 31.45, false], ["repairs.", 31.80, true]]},
-    {"out": 33.92, "words": [["Our", 32.60, false], ["local", 33.30, true], ["team.", 33.58, false]]},
-    {"out": 36.40, "words": [["Handled", 34.00, false], ["with", 34.86, false], ["care.", 35.24, true]]},
-    {"out": 39.58, "words": [["Don’t", 36.66, false], ["wait", 36.84, true], ["until", 36.98, false], ["\n", 37.5, false], ["it’s", 37.90, false], ["too", 38.20, false], ["late.", 38.64, true]]},
-    {"out": 42.22, "words": [["Secure", 39.86, false], ["your", 40.08, false], ["free", 40.30, true], ["\n", 40.9, false], ["quote.", 41.64, true]]},
-    {"out": 99.0,  "words": [["Lock", 42.32, false], ["in", 42.54, false], ["your", 42.72, false], ["\n", 42.8, false], ["installation", 42.88, true], ["date.", 43.30, true]]}
-  ],
-  "labels": [
-    {"in": 8.70, "out": 10.65, "text": "ESSEX & SURROUNDING AREAS", "y": 470}
-  ],
-  "name_cards": [
-    {"in": 10.88, "out": 15.10, "line1": "EASTERN COUNTIES", "line2": "PAVING"}
-  ],
-  "card_stacks": [
-    {"out": 20.15, "y0": 440, "cards": [
-      {"in": 15.40, "title": "Transparent pricing", "sub": "Clear and upfront"},
-      {"in": 16.94, "title": "Elite craftsmanship", "sub": "Neat lines, careful finish"},
-      {"in": 19.32, "title": "No hidden fees", "sub": "Zero cut corners"}
-    ]}
-  ],
-  "panels": [
-    {"type": "booking", "in": 20.40, "out": 22.98, "header": "SEASONAL BOOKINGS", "pill": "FILLING FAST",
-     "fill_from": 21.0, "fill_to": 22.6,
-     "badge": {"in": 21.72, "text": "Prime slots filling up fast"}},
-    {"type": "report", "in": 36.62, "out": 39.58, "header": "PAVING CHECK", "pill": "ACT EARLY",
-     "image": "renders/eastern_counties/pavedetail/0001.png",
-     "circles": [[0.42, 0.50, 0.2, 37.30], [0.80, 0.68, 0.12, 37.70]],
-     "badge": {"in": 38.20, "text": "Fix minor wear early"}}
-  ],
-  "cta": {
-    "name_in": 40.30, "button_in": 41.64, "label_in": 41.10,
-    "name": "EASTERN COUNTIES PAVING",
-    "button": "Get your free quote",
-    "label": "Free, no-obligation quote"
+ "_note": "Times in seconds on the voiceover timeline (config/voiceover_words.json). Caption words: [text, appear_time, highlight]; '\\n' = line break.",
+ "captions": [
+  {
+   "out": 4.05,
+   "words": [
+    [
+     "Cracks.",
+     2.02,
+     true
+    ],
+    [
+     "Sinking.",
+     2.6,
+     true
+    ],
+    [
+     "Wear.",
+     3.3,
+     true
+    ]
+   ]
   },
-  "sparkles": {"in": 39.70},
-  "rain": {"e1": 0.0, "e2": 0.0, "e3": 0.0, "e6b": 25.5, "e9": 0.0},
-  "transitions": {
-    "default": "whip",
-    "e5>e6a": "defocus",
-    "e6a>e6b": "defocus",
-    "e8>e9": "defocus",
-    "e9>e10": "defocus"
+  {
+   "out": 8.25,
+   "words": [
+    [
+     "Costly",
+     5.86,
+     false
+    ],
+    [
+     "structural",
+     6.36,
+     false
+    ],
+    [
+     "\n",
+     6.7,
+     false
+    ],
+    [
+     "damage.",
+     6.78,
+     true
+    ]
+   ]
+  },
+  {
+   "out": 10.65,
+   "words": [
+    [
+     "Across",
+     8.56,
+     false
+    ],
+    [
+     "Essex.",
+     8.78,
+     true
+    ]
+   ]
+  },
+  {
+   "out": 15.1,
+   "words": [
+    [
+     "Built",
+     12.16,
+     false
+    ],
+    [
+     "on",
+     13.66,
+     false
+    ],
+    [
+     "trust.",
+     14.58,
+     true
+    ]
+   ]
+  },
+  {
+   "out": 20.15,
+   "words": [
+    [
+     "Zero",
+     18.12,
+     false
+    ],
+    [
+     "cut",
+     18.46,
+     false
+    ],
+    [
+     "corners.",
+     18.68,
+     true
+    ]
+   ]
+  },
+  {
+   "out": 22.95,
+   "words": [
+    [
+     "Seasonal",
+     21.0,
+     false
+    ],
+    [
+     "slots",
+     21.72,
+     false
+    ],
+    [
+     "\n",
+     22.0,
+     false
+    ],
+    [
+     "filling",
+     22.06,
+     true
+    ],
+    [
+     "fast.",
+     22.5,
+     true
+    ]
+   ]
+  },
+  {
+   "out": 24.88,
+   "words": [
+    [
+     "Secure",
+     24.0,
+     false
+    ],
+    [
+     "your",
+     24.34,
+     false
+    ],
+    [
+     "property.",
+     24.56,
+     true
+    ]
+   ]
+  },
+  {
+   "out": 26.95,
+   "words": [
+    [
+     "Before",
+     24.94,
+     false
+    ],
+    [
+     "the",
+     25.34,
+     false
+    ],
+    [
+     "weather",
+     25.5,
+     true
+    ],
+    [
+     "turns.",
+     25.66,
+     true
+    ]
+   ]
+  },
+  {
+   "out": 30.12,
+   "words": [
+    [
+     "Driveway",
+     28.72,
+     false
+    ],
+    [
+     "\n",
+     29.0,
+     false
+    ],
+    [
+     "transformations.",
+     29.14,
+     true
+    ]
+   ]
+  },
+  {
+   "out": 31.35,
+   "words": [
+    [
+     "Patio",
+     30.34,
+     false
+    ],
+    [
+     "overhauls.",
+     30.52,
+     true
+    ]
+   ]
+  },
+  {
+   "out": 32.45,
+   "words": [
+    [
+     "Precision",
+     31.45,
+     false
+    ],
+    [
+     "repairs.",
+     31.8,
+     true
+    ]
+   ]
+  },
+  {
+   "out": 33.92,
+   "words": [
+    [
+     "Our",
+     32.6,
+     false
+    ],
+    [
+     "local",
+     33.3,
+     true
+    ],
+    [
+     "team.",
+     33.58,
+     false
+    ]
+   ]
+  },
+  {
+   "out": 36.4,
+   "words": [
+    [
+     "Handled",
+     34.0,
+     false
+    ],
+    [
+     "with",
+     34.86,
+     false
+    ],
+    [
+     "care.",
+     35.24,
+     true
+    ]
+   ]
+  },
+  {
+   "out": 39.58,
+   "words": [
+    [
+     "Don’t",
+     36.66,
+     false
+    ],
+    [
+     "wait",
+     36.84,
+     true
+    ],
+    [
+     "until",
+     36.98,
+     false
+    ],
+    [
+     "\n",
+     37.5,
+     false
+    ],
+    [
+     "it’s",
+     37.9,
+     false
+    ],
+    [
+     "too",
+     38.2,
+     false
+    ],
+    [
+     "late.",
+     38.64,
+     true
+    ]
+   ]
+  },
+  {
+   "out": 42.22,
+   "words": [
+    [
+     "Secure",
+     39.86,
+     false
+    ],
+    [
+     "your",
+     40.08,
+     false
+    ],
+    [
+     "free",
+     40.3,
+     true
+    ],
+    [
+     "\n",
+     40.9,
+     false
+    ],
+    [
+     "quote.",
+     41.64,
+     true
+    ]
+   ]
+  },
+  {
+   "out": 99.0,
+   "words": [
+    [
+     "Lock",
+     42.32,
+     false
+    ],
+    [
+     "in",
+     42.54,
+     false
+    ],
+    [
+     "your",
+     42.72,
+     false
+    ],
+    [
+     "\n",
+     42.8,
+     false
+    ],
+    [
+     "installation",
+     42.88,
+     true
+    ],
+    [
+     "date.",
+     43.3,
+     true
+    ]
+   ]
   }
+ ],
+ "labels": [
+  {
+   "in": 8.7,
+   "out": 10.65,
+   "text": "ESSEX & SURROUNDING AREAS",
+   "y": 470
+  }
+ ],
+ "name_cards": [
+  {
+   "in": 10.88,
+   "out": 15.1,
+   "line1": "EASTERN COUNTIES",
+   "line2": "PAVING",
+   "logo": "projects/eastern_counties/assets/logo.png"
+  }
+ ],
+ "card_stacks": [
+  {
+   "out": 20.15,
+   "y0": 440,
+   "cards": [
+    {
+     "in": 15.4,
+     "title": "Transparent pricing",
+     "sub": "Clear and upfront"
+    },
+    {
+     "in": 16.94,
+     "title": "Elite craftsmanship",
+     "sub": "Neat lines, careful finish"
+    },
+    {
+     "in": 19.32,
+     "title": "No hidden fees",
+     "sub": "Zero cut corners"
+    }
+   ]
+  }
+ ],
+ "panels": [
+  {
+   "type": "booking",
+   "in": 20.4,
+   "out": 22.98,
+   "header": "SEASONAL BOOKINGS",
+   "pill": "FILLING FAST",
+   "fill_from": 21.0,
+   "fill_to": 22.6,
+   "badge": {
+    "in": 21.72,
+    "text": "Prime slots filling up fast"
+   }
+  },
+  {
+   "type": "report",
+   "in": 36.62,
+   "out": 39.58,
+   "header": "PAVING CHECK",
+   "pill": "ACT EARLY",
+   "image": "renders/eastern_counties/pavedetail/0001.png",
+   "circles": [
+    [
+     0.42,
+     0.5,
+     0.2,
+     37.3
+    ],
+    [
+     0.8,
+     0.68,
+     0.12,
+     37.7
+    ]
+   ],
+   "badge": {
+    "in": 38.2,
+    "text": "Fix minor wear early"
+   }
+  }
+ ],
+ "cta": {
+  "name_in": 40.3,
+  "button_in": 41.64,
+  "label_in": 41.1,
+  "name": "EASTERN COUNTIES PAVING",
+  "button": "Get your free quote",
+  "label": "Free, no-obligation quote",
+  "logo": "projects/eastern_counties/assets/logo.png",
+  "phone": "01206 203347",
+  "website": "essexandsuffolkdriveways.co.uk",
+  "contact_in": 42.32,
+  "shade_from": 1000,
+  "y": {
+   "logo": 1150,
+   "label": 1320,
+   "button": 1420,
+   "contact": 1545
+  }
+ },
+ "sparkles": {
+  "in": 39.7
+ },
+ "rain": {
+  "e6b": 25.6
+ },
+ "transitions": {
+  "default": "whip",
+  "e5>e6a": "defocus",
+  "e6a>e6b": "defocus",
+  "e8>e9": "defocus",
+  "e9>e10": "defocus"
+ },
+ "top_shade": 0.55
 }

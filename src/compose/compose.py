@@ -437,6 +437,8 @@ def name_cards():
 @functools.lru_cache(maxsize=None)
 def name_card_img(k=0):
     nc = name_cards()[k]
+    if nc.get("logo"):
+        return logo_card(nc["logo"], 900, 214)
     w, h = 900, 214
     card = rounded_card(w, h, 30, CREAM, strip=ORANGE, strip_w=16)
     d = ImageDraw.Draw(card)
@@ -448,6 +450,18 @@ def name_card_img(k=0):
     l2 = tracked_len(nc["line2"], f2, 9)
     text_tracked(d, ((w - l1) / 2 + 8, 118), nc["line1"], f1, INK, 2)
     text_tracked(d, ((w - l2) / 2 + 8, 176), nc["line2"], f2, ORANGE, 9)
+    return card
+
+
+@functools.lru_cache(maxsize=None)
+def logo_card(path, w, h):
+    """Client-supplied logo on a cream reference-style card."""
+    card = rounded_card(w, h, 30, CREAM, strip=ORANGE, strip_w=16)
+    lg = Image.open(os.path.join(ROOT, path)).convert("RGBA")
+    lg = lg.crop(lg.getbbox())
+    sc = min((w - 90) / lg.width, (h - 56) / lg.height)
+    lg = lg.resize((int(lg.width * sc), int(lg.height * sc)), Image.LANCZOS)
+    card.alpha_composite(lg, ((w - lg.width) // 2 + 8, (h - lg.height) // 2))
     return card
 
 
@@ -641,9 +655,19 @@ def cta_button():
 
 @functools.lru_cache(maxsize=None)
 def bottom_shade():
-    g = np.clip((np.arange(H) - 1180) / 620, 0, 1) ** 1.3 * 0.82
+    g = np.clip((np.arange(H) - OV["cta"].get("shade_from", 1180)) / 560, 0, 1) ** 1.2 * 0.85
     a = (np.repeat(g[:, None], W, 1) * 255).astype(np.uint8)
     im = Image.new("RGBA", (W, H), (3, 5, 14, 0))
+    im.putalpha(Image.fromarray(a))
+    return im
+
+
+@functools.lru_cache(maxsize=None)
+def top_shade(strength):
+    """Soft dark gradient behind the caption zone (daytime skies)."""
+    g = np.clip(1 - np.arange(H) / 520, 0, 1) ** 1.6 * strength
+    a = (np.repeat(g[:, None], W, 1) * 255).astype(np.uint8)
+    im = Image.new("RGBA", (W, H), (6, 14, 30, 0))
     im.putalpha(Image.fromarray(a))
     return im
 
@@ -653,34 +677,48 @@ def draw_cta(layer, t):
     k = ease_out((t - c["name_in"] + 0.3) / 0.6)
     if k <= 0:
         return
+    y = c.get("y", {})
     shade = bottom_shade()
     if k < 1:
         shade = shade.copy()
         shade.putalpha(shade.getchannel("A").point(lambda v: int(v * k)))
     layer.alpha_composite(shade)
     d = ImageDraw.Draw(layer)
-    # company name, typography only
     p, e, eb = entrance(t, c["name_in"], 0.5)
     if p > 0:
-        f = font("Inter-ExtraBold", 58)
-        txt = Image.new("RGBA", (W, 120), (0, 0, 0, 0))
-        tl = tracked_len(c["name"], f, 3)
-        text_tracked(ImageDraw.Draw(txt), ((W - tl) / 2, 84), c["name"], f, (255, 255, 255), 3)
-        place(layer, txt, W / 2, 1404 + lerp(40, 0, e), alpha=e, blur=lerp(10, 0, e))
-        # orange rule under the name
-        ru = ease_out((t - c["name_in"] - 0.2) / 0.4)
-        if ru > 0:
-            d.rounded_rectangle([W / 2 - 60 * ru, 1446, W / 2 + 60 * ru, 1452], 3, fill=(*ORANGE, 255))
+        if c.get("logo"):
+            hover = 4 * math.sin(2 * math.pi * 0.35 * t)
+            place(layer, logo_card(c["logo"], 860, 176), W / 2, y.get("logo", 1190) + lerp(60, 0, eb) + hover,
+                  scale=lerp(0.9, 1, eb), alpha=e, blur=lerp(12, 0, e), rot=lerp(-3, -0.6, e), shadow=(20, 0.55))
+        else:
+            f = font("Inter-ExtraBold", 58)
+            txt = Image.new("RGBA", (W, 120), (0, 0, 0, 0))
+            tl = tracked_len(c["name"], f, 3)
+            text_tracked(ImageDraw.Draw(txt), ((W - tl) / 2, 84), c["name"], f, (255, 255, 255), 3)
+            place(layer, txt, W / 2, 1404 + lerp(40, 0, e), alpha=e, blur=lerp(10, 0, e))
+            ru = ease_out((t - c["name_in"] - 0.2) / 0.4)
+            if ru > 0:
+                d.rounded_rectangle([W / 2 - 60 * ru, 1446, W / 2 + 60 * ru, 1452], 3, fill=(*ORANGE, 255))
     p, e, eb = entrance(t, c["label_in"], 0.35)
     if p > 0:
         f = font("Inter-SemiBold", 38)
         txt = Image.new("RGBA", (W, 80), (0, 0, 0, 0))
         ImageDraw.Draw(txt).text((W / 2, 54), c["label"], font=f, fill=(255, 255, 255, 235), anchor="ms")
-        place(layer, txt, W / 2, 1536 + lerp(16, 0, e), alpha=e)
+        place(layer, txt, W / 2, y.get("label", 1536) + lerp(16, 0, e), alpha=e)
     p, e, eb = entrance(t, c["button_in"], 0.45)
     if p > 0:
         pulse = 1 + 0.018 * math.sin(2 * math.pi * 1.1 * max(0, t - c["button_in"] - 0.6)) * clamp(t - c["button_in"] - 0.6)
-        place(layer, cta_button(), W / 2, 1650 + lerp(60, 0, e), scale=lerp(0.6, 1, eb) * pulse, alpha=e)
+        place(layer, cta_button(), W / 2, y.get("button", 1650) + lerp(60, 0, e), scale=lerp(0.6, 1, eb) * pulse, alpha=e)
+    if c.get("phone"):
+        p, e, eb = entrance(t, c["contact_in"], 0.4)
+        if p > 0:
+            txt = Image.new("RGBA", (W, 150), (0, 0, 0, 0))
+            dd = ImageDraw.Draw(txt)
+            f1 = font("Inter-ExtraBold", 50)
+            f2 = font("Inter-SemiBold", 34)
+            dd.text((W / 2, 60), c["phone"], font=f1, fill=(255, 255, 255), anchor="ms")
+            dd.text((W / 2, 112), c["website"], font=f2, fill=(255, 255, 255, 220), anchor="ms")
+            place(layer, txt, W / 2, y.get("contact", 1760) + lerp(24, 0, e), alpha=e, blur=lerp(8, 0, e))
 
 
 # ---------------------------------------------------------------------------
@@ -712,6 +750,8 @@ def compose_frame(i):
     arr = grade(arr, i)
     img = Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8)).convert("RGBA")
     ui = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    if OV.get("top_shade"):
+        ui.alpha_composite(top_shade(OV["top_shade"]))
     draw_name_card(ui, t)
     draw_labels(ui, t)
     draw_benefit_cards(ui, t)

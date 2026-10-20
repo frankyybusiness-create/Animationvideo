@@ -58,7 +58,8 @@ def home_set(state="damaged", neighbours=True, extra_lights=True):
     L.build_background_street(y=16)
     L.bokeh_lights(70, center=(0, 34, 5), spread=(40, 8, 6))
     L.area_light("moon", (-6, 20, 18), (0, 0, 4), 4000, "#7c9cff", size=10)
-    hedge = L.mat_knit("hedge", "#1f3a1e", scale=30)
+    hedge = L.mat_knit("hedge_day", "#3d7a2f", scale=30)
+    hedge.node_tree.nodes["Principled BSDF"].inputs["Sheen Weight"].default_value = 0.0
     for x in (-3.75, 3.75):
         L.rbox(f"hedge{x}", (0.6, 6.2, 1.1), 0.25, hedge, (x, -5.7, 0.55))
     dw = None
@@ -405,11 +406,6 @@ def e6b():
         L.key(lf, "location", min(n, st + rnd.randint(40, 70)), (rnd.uniform(4, 9), y + rnd.uniform(-1, 1), max(0.05, z0 - rnd.uniform(1, 3))))
         L.key(lf, "rotation_euler", 1, (0, 0, 0))
         L.key(lf, "rotation_euler", n, (rnd.uniform(5, 15), rnd.uniform(5, 15), rnd.uniform(0, 6)))
-    sky = bpy.context.scene.world.node_tree.nodes["Background"]
-    sky.inputs["Strength"].default_value = 1.0
-    sky.inputs["Strength"].keyframe_insert("default_value", frame=fw - 10)
-    sky.inputs["Strength"].default_value = 0.55
-    sky.inputs["Strength"].keyframe_insert("default_value", frame=fw + 20)
     cam = L.camera(lens=36, fstop=0.8)
     fe = focus_empty("fo", [(1, (0.2, -6.9, 1.8)), (n, (0.2, -6.9, 1.8))])
     cam.data.dof.focus_object = fe
@@ -606,6 +602,66 @@ def e10():
 
 
 # ---------------------------------------------------------------------------
+# daytime relight (applied to every shot after it is built)
+# ---------------------------------------------------------------------------
+
+def daytime(dim_from=None):
+    """Turn the night set into a bright, soft British daytime.
+
+    Keeps the reference's dimensional clay look: a warm sun key, soft blue sky
+    fill, gentle contrast and shallow depth of field; removes the night-only
+    practical lights (bokeh, lit windows, street lamps, moonlight).
+    """
+    scn = bpy.context.scene
+    nt = scn.world.node_tree
+    ramp = next(n for n in nt.nodes if n.type == "VALTORGB")
+    ramp.color_ramp.elements[0].color = L.hexc("#cfe3f2")
+    ramp.color_ramp.elements[1].color = L.hexc("#5d97d6")
+    bg = nt.nodes["Background"]
+    bg.inputs["Strength"].default_value = 1.6
+    for o in list(bpy.data.objects):
+        n = o.name
+        if (n.startswith("bk") and n[2:].isdigit()) or n.startswith("glow") or n.startswith("sl") and o.type == "LIGHT":
+            bpy.data.objects.remove(o)
+        elif o.type == "LIGHT" and (n == "moon" or n.endswith("_porchL") or n == "lightning"):
+            bpy.data.objects.remove(o)
+        elif o.type == "LIGHT" and o.data.type == "AREA":
+            o.data.energy *= 0.35  # character fill only
+    for m in bpy.data.materials:
+        if m.name.startswith(("glass_lit", "bgwin_")) or m.name in ("lamp_glow", "street_glow"):
+            nodes = m.node_tree.nodes
+            em = next((x for x in nodes if x.type == "EMISSION"), None)
+            if em:
+                em.inputs["Color"].default_value = L.hexc("#2a3a4e")
+                em.inputs["Strength"].default_value = 0.35
+        if m.name == "ground_wet":
+            r = next(x for x in m.node_tree.nodes if x.type == "VALTORGB")
+            r.color_ramp.elements[0].color = (0.45, 0.45, 0.45, 1)
+            r.color_ramp.elements[1].color = (0.7, 0.7, 0.7, 1)
+            m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = L.hexc("#3a3c40")
+        if m.name.startswith(("drive_", "pallet_blocks", "patio_", "d")) and "Principled BSDF" in m.node_tree.nodes:
+            m.node_tree.nodes["Principled BSDF"].inputs["Coat Weight"].default_value = 0.0
+    sun_d = bpy.data.lights.new("sun", "SUN")
+    sun_d.energy = 4.2
+    sun_d.angle = math.radians(4)
+    sun_d.color = L.hexc("#fff1dc")[:3]
+    sun = bpy.data.objects.new("sun", sun_d)
+    scn.collection.objects.link(sun)
+    sun.rotation_euler = rad(52, 0, -38)
+    if dim_from is not None:  # "before the weather turns": clouds roll in
+        f0, f1 = dim_from
+        for f, se, be in ((f0, 4.2, 1.6), (f1, 1.2, 0.9)):
+            sun_d.energy = se
+            sun_d.keyframe_insert("energy", frame=f)
+            bg.inputs["Strength"].default_value = be
+            bg.inputs["Strength"].keyframe_insert("default_value", frame=f)
+    try:
+        scn.view_settings.look = "AgX - Medium High Contrast"
+    except TypeError:
+        pass
+
+
+# ---------------------------------------------------------------------------
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--shot", required=True)
@@ -617,6 +673,11 @@ def main():
     a = ap.parse_args()
     L.reset_scene()
     n = SHOTS[a.shot]()
+    if a.shot == "e6b":
+        sh, _ = span("e6b")
+        daytime(dim_from=(F(sh["start"], 25.3), F(sh["start"], 26.6)))
+    else:
+        daytime()
     L.render_settings(a.pct, a.samples, 1, n)
     scn = bpy.context.scene
     if "res" in scn.keys():
