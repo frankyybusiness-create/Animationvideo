@@ -180,7 +180,7 @@ def logo_card(w=860, sub="LAWRENCE & THE TEAM", pad=60):
     card.alpha_composite(logo, (pad, pad - 5))
     if sub:
         d = ImageDraw.Draw(card)
-        d.text((w // 2, 55 + lh + 52), sub, font=font("Bold", 30), fill=GREY, anchor="mm")
+        d.text((w // 2, pad - 5 + lh + 44), sub, font=font("Bold", 26), fill=GREY, anchor="mm")
     return with_shadow(card)
 
 
@@ -456,8 +456,8 @@ class Cards:
     def __init__(self):
         self.cache = {}
         self.map_card = map_card()
-        self.logo = logo_card()
-        self.logo_cta = logo_card(620, sub=None, pad=36)
+        self.logo = logo_card(600, pad=44)
+        self.logo_cta = logo_card(500, sub=None, pad=30)
         self.button = None
 
     def sprite(self, key, fn):
@@ -496,7 +496,7 @@ class Cards:
                 spr = self.sprite(("tag", ci), lambda: tag_sprite(c["text"], c["color"]))
                 y = CARD_Y if ci != 0 else CARD_Y
                 if c["text"] == "BUILT ON TRUST":
-                    y = CARD_Y + 395
+                    y = CARD_Y + 300
                 if c["text"].startswith("TRANSFORM"):
                     y = CARD_Y
                 self.put(img, spr, CAP_X, y, self.entrance(t, c["start"]) * out, t, ci)
@@ -551,7 +551,7 @@ class Cards:
             img.alpha_composite(layer, (0, int(1040 + (1 - p_sub) * 20)))
         p_logo = self.entrance(t, c["logo_t"], 0.45)
         lg, pad = self.logo_cta
-        self.put(img, self.logo_cta, (W - lg.width + 2 * pad) // 2, 1100, p_logo, t, 0.0,
+        self.put(img, self.logo_cta, (W - lg.width + 2 * pad) // 2, 1110, p_logo, t, 0.0,
                  hover=3)
         if self.button is None:
             self.button = cta_button(c["button"])
