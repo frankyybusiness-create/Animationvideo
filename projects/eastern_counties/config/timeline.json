@@ -13,7 +13,7 @@
    "start": 0.0,
    "end": 4.2,
    "scene": 1,
-   "step": 2,
+   "step": 1,
    "desc": "Cracked, sinking block paving; tilt up to worried homeowner Linda"
   },
   {
@@ -21,7 +21,7 @@
    "start": 4.2,
    "end": 8.4,
    "scene": 2,
-   "step": 3,
+   "step": 1,
    "desc": "Damage worsens (blocks sink, weeds), Linda winces"
   },
   {
@@ -29,7 +29,7 @@
    "start": 8.4,
    "end": 10.8,
    "scene": 2,
-   "step": 3,
+   "step": 2,
    "desc": "Wide Essex street at dusk + location label"
   },
   {
@@ -37,7 +37,7 @@
    "start": 10.8,
    "end": 15.25,
    "scene": 3,
-   "step": 3,
+   "step": 2,
    "desc": "Paving team with Linda on the driveway; name card"
   },
   {
@@ -45,7 +45,7 @@
    "start": 15.25,
    "end": 20.3,
    "scene": 4,
-   "step": 3,
+   "step": 1,
    "desc": "Paver kneels, lays and taps blocks; benefit cards"
   },
   {
@@ -53,7 +53,7 @@
    "start": 20.3,
    "end": 23.1,
    "scene": 4,
-   "step": 3,
+   "step": 2,
    "desc": "Background for the seasonal bookings panel"
   },
   {
@@ -61,7 +61,7 @@
    "start": 23.1,
    "end": 27.1,
    "scene": 5,
-   "step": 3,
+   "step": 2,
    "desc": "Weather turning; crew with barrow and pallet, Linda"
   },
   {
@@ -69,7 +69,7 @@
    "start": 27.1,
    "end": 30.25,
    "scene": 6,
-   "step": 3,
+   "step": 1,
    "desc": "Driveway transformation: blocks sweep into place"
   },
   {
@@ -77,7 +77,7 @@
    "start": 30.25,
    "end": 31.45,
    "scene": 6,
-   "step": 3,
+   "step": 1,
    "desc": "Patio overhaul: slabs drop in"
   },
   {
@@ -85,7 +85,7 @@
    "start": 31.45,
    "end": 32.55,
    "scene": 6,
-   "step": 3,
+   "step": 1,
    "desc": "Precision repair close-up with mallet"
   },
   {
@@ -93,7 +93,7 @@
    "start": 32.55,
    "end": 36.5,
    "scene": 6,
-   "step": 3,
+   "step": 2,
    "desc": "Finished driveway; team + happy Linda"
   },
   {
@@ -101,7 +101,7 @@
    "start": 36.5,
    "end": 39.7,
    "scene": 6,
-   "step": 3,
+   "step": 2,
    "desc": "Background for the paving check panel"
   },
   {
@@ -109,7 +109,7 @@
    "start": 39.7,
    "end": 46.6,
    "scene": 7,
-   "step": 3,
+   "step": 2,
    "desc": "Closing: finished home, Linda waves, CTA"
   }
  ]
