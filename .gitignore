@@ -1,3 +1,4 @@
 renders/
 __pycache__/
 *.pyc
+output/live_preview.html
